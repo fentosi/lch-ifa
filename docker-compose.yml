@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    build: ./docker
+    networks:
+      - default
+    ports:
+      - "8829:80"
+    volumes:
+      - ".:/var/www/html/"
+    environment:
+      - APPLICATION_ENV=development
