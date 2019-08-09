@@ -1,0 +1,64 @@
+body {
+    background-color: #010000;
+    color: #fff;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+header {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+header .container img {
+    display: block;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.container {
+    max-width: 820px;
+    text-align: center;
+}
+
+label {
+    margin-top: 0.5em;
+    text-align: left;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.orange {
+    color: #e06734;
+}
+
+.button,
+input[type="submit"] {
+    border: 1px solid #e06734;
+    color: #e06734;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+.button:hover, 
+input[type="submit"]:hover {
+    background-color: #e06734;
+    border: 1px solid white;
+    color: white;
+}
