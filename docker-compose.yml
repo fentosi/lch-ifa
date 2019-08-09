@@ -7,6 +7,6 @@ services:
     ports:
       - "8829:80"
     volumes:
-      - ".:/var/www/html/"
+      - "./src:/var/www/html/"
     environment:
       - APPLICATION_ENV=development
