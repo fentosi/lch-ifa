@@ -25,49 +25,49 @@
                     <br /><br />
                     Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
                 </p>         
-                <form>
+                <div>
                     <div class="row">
                         <div class="six columns">
                             <label>Név</label>
-                            <input type="text" class="u-full-width">                             
+                            <input type="text" class="u-full-width" id="name">
                         </div>
                         <div class="two columns">
                             <label>Irsz</label>
-                            <input type="text" class="u-full-width">                            
+                            <input type="text" class="u-full-width" id="zip">
                         </div>
                         <div class="four columns">
                             <label>Gépjármű Rendszám</label>
-                            <input type="text" class="u-full-width">                                 
+                            <input type="text" class="u-full-width" id="reg_num">
                         </div>
                     </div>
                     <div class="row">
                         <div class="four columns">
                             <label>Születési idő</label>
-                            <input type="text" class="u-full-width">                                 
+                            <input type="text" class="u-full-width" id="dob">
                         </div>
                         <div class="four columns">
                             <label>Állampolgárság</label>
-                            <input type="text" class="u-full-width">                            
+                            <input type="text" class="u-full-width" id="nationality">
                         </div>
                         <div class="four columns">
                             <label>Szemelyi igazolvany szám</label>
-                            <input type="text" class="u-full-width">                                 
+                            <input type="text" class="u-full-width" id="id_number">
                         </div>
                     </div>
                     <div class="row">
                         <div class="six columns">
                             <label>Érkezés napja</label>
-                            <input type="text" class="u-full-width">                                 
+                            <input type="text" class="u-full-width" id="arrival_date">
                         </div>
                         <div class="six columns">
                             <label>Távozás napja</label>
-                            <input type="text" class="u-full-width">                                 
+                            <input type="text" class="u-full-width" id="departure_date">
                         </div>
                     </div>
                     <div class="row">
                         <div class="four columns">
                             <label>IFA mentesség jogcíme</label>
-                            <select class="u-full-width">
+                            <select class="u-full-width" id="exemption">
                                 <option value="Nincs">Nincs</option>
                                 <option value="Kiskoru">18. életévét be nem töltött magánszemély </option>
                                 <option value="Soltvadkerti">A településen lakóhellyel, tartózkodási hellyel rendelkező vendég </option>
@@ -76,11 +76,11 @@
                         </div>
                         <div class="five columns">
                             <label>Mentességet igazoló dokumentum neve</label>
-                            <input type="text" class="u-full-width">
+                            <input type="text" class="u-full-width" id="exemption_proof_type">
                         </div>
                         <div class="three columns">
                             <label>száma</label>
-                            <input type="text" class="u-full-width">
+                            <input type="text" class="u-full-width" id="exemption_proof_num">
                         </div>                            
                     </div>
                     <div class="row">
@@ -90,7 +90,7 @@
                         </p>
                     </div>
                     <input type="button" value="Küldés" id="submit" class="submit button button-primary">
-                </form>
+                </div>
                 <div>
                     <p class="small">
                         SOLTVADKERT VÁROS ÖNKORMÁNYZATÁNAK 16/2016. (XII.1.) önkormányzati rendelete
