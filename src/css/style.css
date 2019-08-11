@@ -46,10 +46,13 @@ label {
     color: #e06734;
 }
 
+.button.button-primary,
 .button,
+input[type="button"].button-primary,
 input[type="submit"] {
-    border: 1px solid #e06734;
-    color: #e06734;
+    background-color: #e06734;
+    border: 1px solid white;
+    color: white;
 }
 
 .small {
@@ -57,8 +60,10 @@ input[type="submit"] {
 }
 
 .button:hover, 
+.button.button-primary:hover,
+input[type="button"].button-primary:hover,
 input[type="submit"]:hover {
-    background-color: #e06734;
-    border: 1px solid white;
-    color: white;
+    border: 1px solid #e06734;
+    color: #e06734;
+    background-color: #fff;
 }

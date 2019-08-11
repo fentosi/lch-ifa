@@ -89,7 +89,7 @@
                             <label for="tcs">Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja Soltvadkert önkormányzatának</label>
                         </p>
                     </div>
-                    <input type="submit" value="Küldés">
+                    <input type="button" value="Küldés" id="submit" class="submit button button-primary">
                 </form>
                 <div>
                     <p class="small">
