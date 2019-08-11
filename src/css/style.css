@@ -22,7 +22,6 @@ header .container img {
 
 .container {
     max-width: 820px;
-    text-align: center;
 }
 
 label {
@@ -46,6 +45,19 @@ label {
     color: #e06734;
 }
 
+.has-error {
+    color: red;
+}
+
+.error {
+    display: none;
+    font-size: 0.8em;
+}
+
+.has-error .error {
+    display: block;
+}
+
 .button.button-primary,
 .button,
 input[type="button"].button-primary,
@@ -62,7 +74,11 @@ input[type="submit"] {
 .button:hover, 
 .button.button-primary:hover,
 input[type="button"].button-primary:hover,
-input[type="submit"]:hover {
+input[type="submit"]:hover,
+.button:focus, 
+.button.button-primary:focus,
+input[type="button"].button-primary:focus,
+input[type="submit"]:focus {
     border: 1px solid #e06734;
     color: #e06734;
     background-color: #fff;

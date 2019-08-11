@@ -25,43 +25,51 @@
                     <br /><br />
                     Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
                 </p>         
-                <div>
+                <form method="POST" id="ifa_form">
                     <div class="row">
                         <div class="six columns">
                             <label>Név</label>
                             <input type="text" class="u-full-width" id="name">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="two columns">
                             <label>Irsz</label>
                             <input type="text" class="u-full-width" id="zip">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Gépjármű Rendszám</label>
                             <input type="text" class="u-full-width" id="reg_num">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="four columns">
                             <label>Születési idő</label>
                             <input type="text" class="u-full-width" id="dob">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Állampolgárság</label>
                             <input type="text" class="u-full-width" id="nationality">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Szemelyi igazolvany szám</label>
                             <input type="text" class="u-full-width" id="id_number">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="six columns">
                             <label>Érkezés napja</label>
                             <input type="text" class="u-full-width" id="arrival_date">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="six columns">
                             <label>Távozás napja</label>
                             <input type="text" class="u-full-width" id="departure_date">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
@@ -77,10 +85,12 @@
                         <div class="five columns">
                             <label>Mentességet igazoló dokumentum neve</label>
                             <input type="text" class="u-full-width" id="exemption_proof_type">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="three columns">
                             <label>száma</label>
                             <input type="text" class="u-full-width" id="exemption_proof_num">
+                            <div class="error">A mező kitöltése kötelező</div>
                         </div>                            
                     </div>
                     <div class="row">
@@ -90,7 +100,8 @@
                         </p>
                     </div>
                     <input type="button" value="Küldés" id="submit" class="submit button button-primary">
-                </div>
+                </form>
+                <br />
                 <div>
                     <p class="small">
                         SOLTVADKERT VÁROS ÖNKORMÁNYZATÁNAK 16/2016. (XII.1.) önkormányzati rendelete
@@ -106,6 +117,7 @@
                 </div>       
             </div>
     </div>
-    
+    <script src="scripts/jquery-3.4.1.slim.min.js"></script>
+    <script src="scripts/scripts.js"></script>
     </body>
 </html>
