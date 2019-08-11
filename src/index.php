@@ -25,57 +25,57 @@
                     <br /><br />
                     Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
                 </p>         
-                <form method="POST" id="ifa_form">
+                <form method="POST" id="ifa_form" action="index.php">
                     <div class="row">
                         <div class="six columns">
                             <label>Név</label>
-                            <input type="text" class="u-full-width" id="name">
+                            <input type="text" class="u-full-width" id="name" name="name">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="two columns">
                             <label>Irsz</label>
-                            <input type="text" class="u-full-width" id="zip">
+                            <input type="text" class="u-full-width" id="zip" name="zip">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Gépjármű Rendszám</label>
-                            <input type="text" class="u-full-width" id="reg_num">
+                            <input type="text" class="u-full-width" id="reg_num" name="reg_num">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="four columns">
                             <label>Születési idő</label>
-                            <input type="text" class="u-full-width" id="dob">
+                            <input type="text" class="u-full-width" id="dob" name="dob">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Állampolgárság</label>
-                            <input type="text" class="u-full-width" id="nationality">
+                            <input type="text" class="u-full-width" id="nationality" name="nationality">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Szemelyi igazolvany szám</label>
-                            <input type="text" class="u-full-width" id="id_number">
+                            <input type="text" class="u-full-width" id="id_number" name="id_number">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="six columns">
                             <label>Érkezés napja</label>
-                            <input type="text" class="u-full-width" id="arrival_date">
+                            <input type="text" class="u-full-width" id="arrival_date" name="arrival_date">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="six columns">
                             <label>Távozás napja</label>
-                            <input type="text" class="u-full-width" id="departure_date">
+                            <input type="text" class="u-full-width" id="departure_date" name="departure_date">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="four columns">
                             <label>IFA mentesség jogcíme</label>
-                            <select class="u-full-width" id="exemption">
+                            <select class="u-full-width" id="exemption" name="exemption">
                                 <option value="Nincs">Nincs</option>
                                 <option value="Kiskoru">18. életévét be nem töltött magánszemély </option>
                                 <option value="Soltvadkerti">A településen lakóhellyel, tartózkodási hellyel rendelkező vendég </option>
@@ -84,22 +84,23 @@
                         </div>
                         <div class="five columns">
                             <label>Mentességet igazoló dokumentum neve</label>
-                            <input type="text" class="u-full-width" id="exemption_proof_type">
+                            <input type="text" class="u-full-width" id="exemption_proof_type" name="exemption_proof_type">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="three columns">
                             <label>száma</label>
-                            <input type="text" class="u-full-width" id="exemption_proof_num">
+                            <input type="text" class="u-full-width" id="exemption_proof_num" name="exemption_proof_num">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>                            
                     </div>
                     <div class="row">
-                        <p>
+                        <div class="twelve columns">
                             <input type="checkbox" name="tcs" id="tcs" class="u-pull-left" style="margin-top: 0.5em; margin-right: 1em;">
                             <label for="tcs">Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja Soltvadkert önkormányzatának</label>
-                        </p>
+                            <div class="error">Hozzájárulásod szükséges a bejelentőlap kitöltéséhez</div>
+                        </div>
                     </div>
-                    <input type="button" value="Küldés" id="submit" class="submit button button-primary">
+                    <input type="button" value="Küldés" id="form_submit_button" class="submit button button-primary">
                 </form>
                 <br />
                 <div>
