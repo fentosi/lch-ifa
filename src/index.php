@@ -1,10 +1,23 @@
+<?php
+    require_once ('includes/recaptcha.php');
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
+        $recaptcha = new reCaptcha($_POST['token']);
+
+        if ($recaptcha->isValid()) {
+            echo 'valid';
+        } else {
+            echo 'error';
+        }
+    }
+?>
 <!DOCTYPE html>
 <html>
     <head>
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
-	
+
         <title>IFA - LadaClubHungary</title>
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
 	    <link rel="stylesheet" type="text/css" href="css/skeleton.css">
@@ -16,7 +29,7 @@
 	            <img src="images/lchlogo.png" alt="LadaClubHungary Logo">
             </div>
         </header>
-        
+
         <div class="content">
             <div class="container">
                 <h3>Idegenforgalmi adó - Bejelentő lap</h3>
@@ -24,8 +37,9 @@
                     Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni a rendezvénzre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
                     <br /><br />
                     Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
-                </p>         
+                </p>
                 <form method="POST" id="ifa_form" action="index.php">
+                    <input type="hidden" name="token" id="token">
                     <div class="row">
                         <div class="six columns">
                             <label>Név</label>
@@ -91,7 +105,7 @@
                             <label>száma</label>
                             <input type="text" class="u-full-width" id="exemption_proof_num" name="exemption_proof_num">
                             <div class="error">A mező kitöltése kötelező</div>
-                        </div>                            
+                        </div>
                     </div>
                     <div class="row">
                         <div class="twelve columns">
@@ -113,12 +127,20 @@
                     <p class="small">
                         LadaClubHungary kijelenti, hogy az alábbi bejelentőlapon feltüntetett adatokat kizárólag a Soltvadkert Város
                         Önkormányzatának előírása alapján, a Turistavadász (www.turistavadasz.hu) felületre történő bevalláshoz
-                        használja fel, utána azt megsemmisíti. Az adatok kezelője Soltvadkert Város Önkormányzata. 
+                        használja fel, utána azt megsemmisíti. Az adatok kezelője Soltvadkert Város Önkormányzata.
                     </p>
-                </div>       
+                </div>
             </div>
     </div>
     <script src="scripts/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeXebIUAAAAAIAFTC5xZXMGelSaDHjMukahuMQk"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeXebIUAAAAAIAFTC5xZXMGelSaDHjMukahuMQk', {action: 'homepage'}).then(function(token) {
+                $('#token').val(token);
+            });
+        });
+    </script>
     <script src="scripts/scripts.js"></script>
     </body>
 </html>
