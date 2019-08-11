@@ -3,6 +3,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.3.8",
+        "vlucas/phpdotenv": "^3.4"
     },
     "config": {
         "preferred-install": {

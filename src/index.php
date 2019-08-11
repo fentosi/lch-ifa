@@ -1,8 +1,12 @@
 <?php
+    require_once ('vendor/autoload.php');
     require_once ('includes/recaptcha.php');
 
+    $dotenv = Dotenv\Dotenv::create(__DIR__);
+    $dotenv->load();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
-        $recaptcha = new reCaptcha($_POST['token']);
+        $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
 
         if ($recaptcha->isValid()) {
             echo 'valid';
@@ -133,10 +137,10 @@
             </div>
     </div>
     <script src="scripts/jquery-3.4.1.slim.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LeXebIUAAAAAIAFTC5xZXMGelSaDHjMukahuMQk"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?=$_ENV['RECAPTCHA_KEY']?>"></script>
     <script>
         grecaptcha.ready(function() {
-            grecaptcha.execute('6LeXebIUAAAAAIAFTC5xZXMGelSaDHjMukahuMQk', {action: 'homepage'}).then(function(token) {
+            grecaptcha.execute('<?=$_ENV['RECAPTCHA_KEY']?>', {action: 'homepage'}).then(function(token) {
                 $('#token').val(token);
             });
         });
