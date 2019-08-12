@@ -1,18 +1,28 @@
 <?php
     require_once ('vendor/autoload.php');
     require_once ('includes/recaptcha.php');
+    require_once ('includes/contact.php');
+
+    $error = [];
 
     $dotenv = Dotenv\Dotenv::create(__DIR__);
     $dotenv->load();
+
+    $contact = Contact::createFromPost($_POST);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
         $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
 
         if ($recaptcha->isValid()) {
-            echo 'valid';
+
         } else {
-            echo 'error';
+            $error[] = 'Captcha ellenőrzés hiba!';
         }
+    }
+
+    function getEscapedValue(string $key, Contact $contact) {
+        $value = $contact->get($key);
+        return empty($value) ? '' : htmlspecialchars($value);
     }
 ?>
 <!DOCTYPE html>
@@ -42,51 +52,54 @@
                     <br /><br />
                     Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
                 </p>
+                <p class="<?=(count($error) ? 'has-error' : '')?>">
+                    <?=implode('<br /><br />', $error)?>
+                </p>
                 <form method="POST" id="ifa_form" action="index.php">
                     <input type="hidden" name="token" id="token">
                     <div class="row">
                         <div class="six columns">
                             <label>Név</label>
-                            <input type="text" class="u-full-width" id="name" name="name">
+                            <input type="text" class="u-full-width" id="name" name="name" value="<?=getEscapedValue('name', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="two columns">
                             <label>Irsz</label>
-                            <input type="text" class="u-full-width" id="zip" name="zip">
+                            <input type="text" class="u-full-width" id="zip" name="zip" value="<?=getEscapedValue('zip', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Gépjármű Rendszám</label>
-                            <input type="text" class="u-full-width" id="reg_num" name="reg_num">
+                            <input type="text" class="u-full-width" id="reg_num" name="reg_num" value="<?=getEscapedValue('regNum', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="four columns">
                             <label>Születési idő</label>
-                            <input type="text" class="u-full-width" id="dob" name="dob">
+                            <input type="text" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Állampolgárság</label>
-                            <input type="text" class="u-full-width" id="nationality" name="nationality">
+                            <input type="text" class="u-full-width" id="nationality" name="nationality" value="<?=getEscapedValue('nationality', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
                             <label>Szemelyi igazolvany szám</label>
-                            <input type="text" class="u-full-width" id="id_number" name="id_number">
+                            <input type="text" class="u-full-width" id="id_number" name="id_number" value="<?=getEscapedValue('idNumber', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="six columns">
                             <label>Érkezés napja</label>
-                            <input type="text" class="u-full-width" id="arrival_date" name="arrival_date">
+                            <input type="text" class="u-full-width" id="arrival_date" name="arrival_date" value="<?=getEscapedValue('arrivalDate', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="six columns">
                             <label>Távozás napja</label>
-                            <input type="text" class="u-full-width" id="departure_date" name="departure_date">
+                            <input type="text" class="u-full-width" id="departure_date" name="departure_date" value="<?=getEscapedValue('departureDate', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
@@ -94,20 +107,20 @@
                         <div class="four columns">
                             <label>IFA mentesség jogcíme</label>
                             <select class="u-full-width" id="exemption" name="exemption">
-                                <option value="Nincs">Nincs</option>
-                                <option value="Kiskoru">18. életévét be nem töltött magánszemély </option>
-                                <option value="Soltvadkerti">A településen lakóhellyel, tartózkodási hellyel rendelkező vendég </option>
-                                <option value="70ev">70. életévet betöltött személy </option>
+                                <option value="Nincs" <?=($contact->getExemption() == 'Nincs' || empty($contact->getExemption()) ? 'selected' : '')?>>Nincs</option>
+                                <option value="Kiskoru" <?=($contact->getExemption() == 'Kiskoru' ? 'selected' : '')?>>18. életévét be nem töltött magánszemély </option>
+                                <option value="Soltvadkerti" <?=($contact->getExemption() == 'Soltvadkerti' ? 'selected' : '')?>>A településen lakóhellyel, tartózkodási hellyel rendelkező vendég </option>
+                                <option value="70ev" <?=($contact->getExemption() == '70ev' ? 'selected' : '')?>>70. életévet betöltött személy </option>
                             </select>
                         </div>
                         <div class="five columns">
                             <label>Mentességet igazoló dokumentum neve</label>
-                            <input type="text" class="u-full-width" id="exemption_proof_type" name="exemption_proof_type">
+                            <input type="text" class="u-full-width" id="exemption_proof_type" name="exemption_proof_type" value="<?=getEscapedValue('exemptionProofType', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="three columns">
                             <label>száma</label>
-                            <input type="text" class="u-full-width" id="exemption_proof_num" name="exemption_proof_num">
+                            <input type="text" class="u-full-width" id="exemption_proof_num" name="exemption_proof_num" value="<?=getEscapedValue('exemptionProofNum', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
