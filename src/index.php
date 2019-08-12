@@ -2,6 +2,7 @@
     require_once ('vendor/autoload.php');
     require_once ('includes/recaptcha.php');
     require_once ('includes/contact.php');
+    require_once ('includes/IFAMaker.php');
 
     $error = [];
 
@@ -14,9 +15,9 @@
         $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
 
         if ($recaptcha->isValid()) {
-
+            (new IFAMaker($contact))->make()->download();
         } else {
-            $error[] = 'Captcha ellenőrzés hiba!';
+            $error[] = 'Captcha ellenőrzés hiba, a form újraküldéséhez kattints a küldés gombra!';
         }
     }
 
