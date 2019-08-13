@@ -14,6 +14,8 @@ class Contact
     private $exemption;
     private $exemptionProofType;
     private $exemptionProofNum;
+    private $consent;
+    private $hash;
 
     public function __construct(
         string $name,
@@ -40,6 +42,8 @@ class Contact
         $this->exemption = $exemption;
         $this->exemptionProofType = $exemptionProofType;
         $this->exemptionProofNum = $exemptionProofNum;
+        $this->consent = 'Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja Soltvadkert önkormányzatának';
+        $this->hash = spl_object_hash($this);
     }
 
     public function getName(): string
@@ -98,24 +102,34 @@ class Contact
         return $this->exemptionProofNum;
     }
 
+    public function getConsent(): string
+    {
+        return $this->consent;
+    }
+
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
     public function get($key) {
         return $this->$key;
     }
 
-    public static function createFromPost(array $post)
+    public static function createFrom(array $data)
     {
         return new Contact(
-            $post['name'] ?? '',
-            $post['zip'] ?? '',
-            $post['reg_num'] ?? '',
-            $post['dob'] ?? '',
-            $post['nationality'] ?? '',
-            $post['id_number'] ?? '',
-            $post['arrival_date'] ?? '',
-            $post['departure_date'] ?? '',
-            $post['exemption'] ?? '',
-            $post['exemption_proof_type'] ?? '',
-            $post['exemption_proof_num'] ?? ''
+            $data['name'] ?? '',
+            $data['zip'] ?? '',
+            $data['reg_num'] ?? '',
+            $data['dob'] ?? '',
+            $data['nationality'] ?? '',
+            $data['id_number'] ?? '',
+            $data['arrival_date'] ?? '',
+            $data['departure_date'] ?? '',
+            $data['exemption'] ?? '',
+            $data['exemption_proof_type'] ?? '',
+            $data['exemption_proof_num'] ?? ''
         );
     }
 }

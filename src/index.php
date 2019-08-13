@@ -1,21 +1,31 @@
 <?php
+    ini_set('display_errors', 'off');
     require_once ('vendor/autoload.php');
-    require_once ('includes/recaptcha.php');
-    require_once ('includes/contact.php');
-    require_once ('includes/IFAMaker.php');
-
-    $error = [];
 
     $dotenv = Dotenv\Dotenv::create(__DIR__);
     $dotenv->load();
 
-    $contact = Contact::createFromPost($_POST);
+    require_once ('includes/dbConnection.php');
+    require_once ('includes/recaptcha.php');
+    require_once ('includes/contact.php');
+    require_once ('includes/ContactRepository.php');
+
+    $error = [];
+
+    $contact = Contact::createFrom($_POST);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
         $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
 
         if ($recaptcha->isValid()) {
-            (new IFAMaker($contact))->make()->download();
+            $contactRepository = new ContactRepository($mysqli);
+
+            try {
+                $contactRepository->saveContact($contact);
+                header('Location: thankyou.php?hash=' . $contact->getHash());
+            } catch (Exception $exception) {
+                $error[] = $exception->getMessage();
+            }
         } else {
             $error[] = 'Captcha ellenőrzés hiba, a form újraküldéséhez kattints a küldés gombra!';
         }
@@ -47,7 +57,7 @@
 
         <div class="content">
             <div class="container">
-                <h3>Idegenforgalmi adó - Bejelentő lap</h3>
+                <h3 style="text-align: center">Idegenforgalmi adó - Bejelentő lap</h3>
                 <p>
                     Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni a rendezvénzre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
                     <br /><br />
