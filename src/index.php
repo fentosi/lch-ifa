@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="four columns">
                             <label>Születési idő</label>
-                            <input type="text" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>">
+                            <input type="text" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>" data-toggle="datepicker" autocomplete="off">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
@@ -105,12 +105,12 @@
                     <div class="row">
                         <div class="six columns">
                             <label>Érkezés napja</label>
-                            <input type="text" class="u-full-width" id="arrival_date" name="arrival_date" value="<?=getEscapedValue('arrivalDate', $contact)?>">
+                            <input type="text" class="u-full-width" id="arrival_date" name="arrival_date" value="<?=getEscapedValue('arrivalDate', $contact)?>" data-toggle="datepicker" autocomplete="off">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="six columns">
                             <label>Távozás napja</label>
-                            <input type="text" class="u-full-width" id="departure_date" name="departure_date" value="<?=getEscapedValue('departureDate', $contact)?>">
+                            <input type="text" class="u-full-width" id="departure_date" name="departure_date" value="<?=getEscapedValue('departureDate', $contact)?>" data-toggle="datepicker" autocomplete="off">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
@@ -169,6 +169,9 @@
             });
         });
     </script>
+    <link  href="/libs/datepicker/datepicker.min.css" rel="stylesheet">
+    <script src="/libs/datepicker/datepicker.min.js"></script>
+    <script src="/libs/datepicker/datepicker.hu-HU.js"></script>
     <script src="scripts/scripts.js"></script>
     </body>
 </html>

@@ -3,10 +3,16 @@
     const tcsElement = $('#tcs');
 
     $(document).ready(() => {
+        $('[data-toggle="datepicker"]').datepicker({
+            language: 'hu-HU',
+            autoHide: true,
+            format: 'yyyy-mm-dd'
+        });
+
         toggleExemption();
-    
+
         $('#exemption').change(toggleExemption);
-    
+
         $('#form_submit_button').click(() => {
             hideError(tcsElement);
             if (isFormValid()) {
@@ -15,10 +21,10 @@
                 } else {
                     showError(tcsElement);
                 }
-            } 
+            }
         });
     });
-    
+
     const isFormValid = function() {
         let isValid = true;
         const requiredIDs = [
@@ -31,13 +37,13 @@
             'arrival_date',
             'departure_date'
         ];
-    
+
         requiredIDs.forEach((id) => {
             if (!isRequiredFieldValid(id)) {
                 isValid = false;
             }
         });
-    
+
         const exemptionSelected = $('#exemption').val() != 'Nincs';
         if (exemptionSelected) {
             if (!isRequiredFieldValid('exemption_proof_type')) {
@@ -47,10 +53,10 @@
                 isValid = false;
             }
         }
-    
+
         return isValid;
     }
-    
+
     const toggleExemption = function() {
         const exemptionSelected = $('#exemption').val() != 'Nincs';
         if (exemptionSelected) {
@@ -60,17 +66,17 @@
             hideExemption();
         }
     };
-    
+
     const hideExemption = function() {
         $('#exemption_proof_type').parent('.columns').hide();
         $('#exemption_proof_num').parent('.columns').hide();
     };
-    
+
     const showExemption = function() {
         $('#exemption_proof_type').parent('.columns').show();
         $('#exemption_proof_num').parent('.columns').show();
     };
-    
+
     const isRequiredFieldValid = function(id) {
         const element = $(`#${id}`);
         hideError(element);
@@ -80,15 +86,15 @@
         }
         return true;
     };
-    
+
     const hideError = function(element) {
         getParentColumn(element).removeClass(errorCls);
     };
-    
+
     const showError = function(element) {
         getParentColumn(element).addClass(errorCls);
     };
-    
+
     const getParentColumn = function(element) {
         return $(element).parent('.columns');
     };

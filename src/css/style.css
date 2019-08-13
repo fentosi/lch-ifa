@@ -3,6 +3,10 @@ body {
     color: #fff;
 }
 
+.datepicker-panel {
+    color: black;
+}
+
 a {
     color: white;
     text-decoration: none;
@@ -71,11 +75,11 @@ input[type="submit"] {
     font-size: 0.8em;
 }
 
-.button:hover, 
+.button:hover,
 .button.button-primary:hover,
 input[type="button"].button-primary:hover,
 input[type="submit"]:hover,
-.button:focus, 
+.button:focus,
 .button.button-primary:focus,
 input[type="button"].button-primary:focus,
 input[type="submit"]:focus {
