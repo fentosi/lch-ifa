@@ -108,9 +108,9 @@
                             2020. augusztus
                             <select id="arrival_date" name="arrival_date">
                                 <option value=""></option>
-                                <option value="27" <?=getEscapedValue('arrivalDate', $contact) === 27 ? 'selected' : ''?>>27. csütörtök</option>
-                                <option value="28" <?=getEscapedValue('arrivalDate', $contact) === 28 ? 'selected' : ''?>>28. péntek</option>
-                                <option value="29" <?=getEscapedValue('arrivalDate', $contact) === 29 ? 'selected' : ''?>>29. szombat</option>
+                                <option value="27" <?=(getEscapedValue('arrivalDate', $contact) == 27 ? 'selected' : '')?>>27. csütörtök</option>
+                                <option value="28" <?=(getEscapedValue('arrivalDate', $contact) == 28 ? 'selected' : '')?>>28. péntek</option>
+                                <option value="29" <?=(getEscapedValue('arrivalDate', $contact) == 29 ? 'selected' : '')?>>29. szombat</option>
                             </select>
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
@@ -119,9 +119,9 @@
                             2020. augusztus
                             <select id="departure_date" name="departure_date">
                                 <option value=""></option>
-                                <option value="28" <?=getEscapedValue('departureDate', $contact) === 28 ? 'selected' : ''?>>28. péntek</option>
-                                <option value="29" <?=getEscapedValue('departureDate', $contact) === 29 ? 'selected' : ''?>>29. szombat</option>
-                                <option value="30" <?=getEscapedValue('departureDate', $contact) === 30 ? 'selected' : ''?>>29. vasárnap</option>
+                                <option value="28" <?=(getEscapedValue('departureDate', $contact) == 28 ? 'selected' : '')?>>28. péntek</option>
+                                <option value="29" <?=(getEscapedValue('departureDate', $contact) == 29 ? 'selected' : '')?>>29. szombat</option>
+                                <option value="30" <?=(getEscapedValue('departureDate', $contact) == 30 ? 'selected' : '')?>>29. vasárnap</option>
                             </select>
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
