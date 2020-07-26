@@ -1,4 +1,4 @@
-FROM php:7.3.8-apache-stretch
+FROM php:7.1-apache-stretch
 
 RUN apt-get update -yqq && \
     apt-get install -y apt-utils zip unzip && \
@@ -8,6 +8,7 @@ RUN apt-get update -yqq && \
     docker-php-ext-configure zip --with-libzip && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install zip && \
+    docker-php-ext-install mysqli && docker-php-ext-enable mysqli && \
     rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd \
