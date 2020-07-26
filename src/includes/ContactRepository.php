@@ -44,6 +44,24 @@ class ContactRepository
         return $result->fetch_assoc();
     }
 
+    public function getAllWithoutReservation()
+    {
+        $query = "
+            SELECT
+                id, name, zip, reg_num, dob, nationality, id_number, arrival_date, departure_date
+            FROM 
+                ifa
+            WHERE 
+                reservation IS NULL
+            ORDER BY reg_num";
+
+        if ($result = $this->mysqli->query($query)) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            throw new Exception("Execute failed");
+        }
+    }
+
     public function saveContact(Contact $contact)
     {
         if (!($statement = $this->mysqli->prepare(
