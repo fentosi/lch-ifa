@@ -7,7 +7,7 @@
 
     require_once ('includes/dbConnection.php');
     require_once ('includes/recaptcha.php');
-    require_once ('includes/contact.php');
+    require_once ('includes/Contact.php');
     require_once ('includes/ContactRepository.php');
 
     $error = [];
@@ -59,7 +59,7 @@
             <div class="container">
                 <h3 style="text-align: center">Idegenforgalmi adó - Bejelentő lap</h3>
                 <p>
-                    Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni a rendezvénzre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
+                    Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni a rendezvényre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
                     <br /><br />
                     Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
                 </p>
@@ -169,9 +169,9 @@
             });
         });
     </script>
-    <link  href="/libs/datepicker/datepicker.min.css" rel="stylesheet">
-    <script src="/libs/datepicker/datepicker.min.js"></script>
-    <script src="/libs/datepicker/datepicker.hu-HU.js"></script>
+    <link  href="/ifa/libs/datepicker/datepicker.min.css" rel="stylesheet">
+    <script src="/ifa/libs/datepicker/datepicker.min.js"></script>
+    <script src="/ifa/libs/datepicker/datepicker.hu-HU.js"></script>
     <script src="scripts/scripts.js"></script>
     </body>
 </html>

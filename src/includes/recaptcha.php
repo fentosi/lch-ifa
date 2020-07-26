@@ -1,7 +1,7 @@
 <?php
 
 class reCaptcha {
-    private const URL = 'https://www.google.com/recaptcha/api/siteverify';
+    const URL = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
      * @var string

@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.3.8",
+        "php": "^7.0.3",
         "vlucas/phpdotenv": "^3.4"
     },
     "config": {
