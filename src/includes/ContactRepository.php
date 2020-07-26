@@ -7,10 +7,15 @@ class ContactRepository
      * @var mysqli
      */
     private $mysqli;
+    /**
+     * @var string
+     */
+    private $datePrefix;
 
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
+        $this->datePrefix = "2020-08-";
     }
 
     public function getByHash(string $hash)
@@ -56,8 +61,8 @@ class ContactRepository
         $dob = $contact->getDob();
         $nationality = $contact->getNationality();
         $idNumber = $contact->getIdNumber();
-        $arrivalDate = $contact->getArrivalDate();
-        $departureDate = $contact->getDepartureDate();
+        $arrivalDate = $this->datePrefix . $contact->getArrivalDate();
+        $departureDate = $this->datePrefix . $contact->getDepartureDate();
         $exemption = $contact->getExemption();
         $exemptionProofType = $contact->getExemptionProofType();
         $exemptionProofNum = $contact->getExemptionProofNum();

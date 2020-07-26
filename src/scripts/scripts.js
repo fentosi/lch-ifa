@@ -3,12 +3,6 @@
     const tcsElement = $('#tcs');
 
     $(document).ready(() => {
-        $('[data-toggle="datepicker"]').datepicker({
-            language: 'hu-HU',
-            autoHide: true,
-            format: 'yyyy-mm-dd'
-        });
-
         toggleExemption();
 
         $('#exemption').change(toggleExemption);
