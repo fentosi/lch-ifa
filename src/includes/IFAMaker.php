@@ -2,8 +2,8 @@
 
 class IFAMaker
 {
-    const FILE = 'IFABejelento.jpg';
-    const FONT = 'ArialCE.ttf';
+    const FILE = 'IFABejelento2020.jpg';
+    const FONT = '/var/www/ladaclubhungary.hu/ifa/ArialCE.ttf';
     const FONT_SIZE = 45;
 
     /**
