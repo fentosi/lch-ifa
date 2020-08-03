@@ -43,7 +43,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
 
-        <title>IFA - LadaClubHungary</title>
+        <title>Regisztracio - LadaClubHungary</title>
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
 	    <link rel="stylesheet" type="text/css" href="css/skeleton.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -57,7 +57,7 @@
 
         <div class="content">
             <div class="container">
-                <h3 style="text-align: center">Idegenforgalmi adó - Bejelentő lap</h3>
+                <h3 style="text-align: center">NTAK - Bejelentő lap</h3>
                 <p>
                     Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni a rendezvényre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
                     <br /><br />
