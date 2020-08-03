@@ -66,7 +66,7 @@
                 <p class="<?=(count($error) ? 'has-error' : '')?>">
                     <?=implode('<br /><br />', $error)?>
                 </p>
-                <form method="POST" id="ifa_form" action="index.php">
+                <form method="POST" id="reg_form" action="index.php">
                     <input type="hidden" name="token" id="token">
                     <div class="row">
                         <div class="six columns">
