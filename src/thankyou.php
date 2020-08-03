@@ -28,7 +28,7 @@
                     <br /><br />
                     A kitöltött bejelentőlapot <a href="ifa.php?hash=<?=$_GET['hash']?>">INNEN</a> tudod letölteni!
                     <br /><br />
-                    Várunk 2019. augusztus 23-25 között Soltvadkerten, a 18. országos Ladatalálkozón!
+                    Várunk 2020. augusztus 28-30 között Soltvadkerten, a 19. országos Ladatalálkozón!
                     <br /><br />
                     Az LCH csapata
                 </p>
