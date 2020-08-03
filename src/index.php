@@ -1,11 +1,11 @@
 <?php
-    ini_set('display_errors', 'off');
+    ini_set('display_errors', 'on');
     require_once ('vendor/autoload.php');
 
     $dotenv = Dotenv\Dotenv::create(__DIR__);
     $dotenv->load();
 
-    require_once ('includes/dbConnection.php');
+//    require_once ('includes/dbConnection.php');
     require_once ('includes/recaptcha.php');
     require_once ('includes/Contact.php');
     require_once ('includes/ContactRepository.php');
@@ -87,8 +87,8 @@
                     </div>
                     <div class="row">
                         <div class="four columns">
-                            <label>Születési idő</label>
-                            <input type="text" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>" data-toggle="datepicker" autocomplete="off">
+                            <label>Születési idő (ÉÉÉÉ.HH.NN.)</label>
+                            <input type="text" pattern="([12]\d{3}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01]))" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>" data-toggle="datepicker" autocomplete="off">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="four columns">
