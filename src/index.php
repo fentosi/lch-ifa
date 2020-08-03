@@ -150,7 +150,7 @@
                     <div class="row">
                         <div class="twelve columns">
                             <input type="checkbox" name="tcs" id="tcs" class="u-pull-left" style="margin-top: 0.5em; margin-right: 1em;">
-                            <label for="tcs">Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja Soltvadkert önkormányzatának</label>
+                            <label for="tcs">Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja a Nemzeti Turisztikai Adatszolgáltató Központ (NTAK) felé</label>
                             <div class="error">Hozzájárulásod szükséges a bejelentőlap kitöltéséhez</div>
                         </div>
                     </div>
@@ -159,15 +159,10 @@
                 <br />
                 <div>
                     <p class="small">
-                        SOLTVADKERT VÁROS ÖNKORMÁNYZATÁNAK 16/2016. (XII.1.) önkormányzati rendelete
-                        alapján adókötelezettség terheli azt a magánszemélyt, aki nem állandó lakosként az önkormányzat illetékességi
-                        területén legalább egy vendégéjszakát eltölt. Az adó alapja a megkezdett vendégéjszakák száma. Az
-                        idegenforgalmi adó mértéke megkezdett vendégéjszakánként 300 Ft/fő.
+                        A Magyar Kormány 235/2019. (X. 15.) valamint 239/2009. (X. 20.) rendelete alapján minden szálláshely szolgáltató adatszolgáltatási kötelezettséggel rendelkezik a Nemzeti Turisztikai Adatszolgáltató Központ (NTAK) felé.
                     </p>
                     <p class="small">
-                        LadaClubHungary kijelenti, hogy az alábbi bejelentőlapon feltüntetett adatokat kizárólag a Soltvadkert Város
-                        Önkormányzatának előírása alapján, a Turistavadász (www.turistavadasz.hu) felületre történő bevalláshoz
-                        használja fel, utána azt megsemmisíti. Az adatok kezelője Soltvadkert Város Önkormányzata.
+                        LadaClubHungary kijelenti, hogy az alábbi bejelentőlapon feltüntetett adatokat a jogszabályi előírásoknak megfelelően kizárólag az NTAK felé történő adatszolgáltatásra használja fel, utána azt megsemmisíti.
                     </p>
                 </div>
             </div>
