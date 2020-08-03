@@ -8,10 +8,11 @@
         $('#exemption').change(toggleExemption);
 
         $('#form_submit_button').click(() => {
+            const form = $('#reg_form');
             hideError(tcsElement);
             if (isFormValid()) {
                 if (tcsElement.is(":checked")) {
-                    $('#ifa_form').submit();
+                    form.submit();
                 } else {
                     showError(tcsElement);
                 }
@@ -46,6 +47,13 @@
             if (!isRequiredFieldValid('exemption_proof_num')) {
                 isValid = false;
             }
+        }
+
+        const dobElement = $('#dob');
+        if (!dobElement[0].checkValidity()) {
+            dobElement[0].reportValidity();
+            showError(dobElement);
+            isValid = false;
         }
 
         return isValid;
