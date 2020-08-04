@@ -16,6 +16,7 @@ class Contact
     private $exemptionProofNum;
     private $consent;
     private $hash;
+    private $id;
 
     public function __construct(
         string $name,
@@ -28,7 +29,8 @@ class Contact
         string $departureDate,
         string $exemption,
         string $exemptionProofType,
-        string $exemptionProofNum
+        string $exemptionProofNum,
+        int $id = null
         )
     {
         $this->name = $name;
@@ -44,6 +46,12 @@ class Contact
         $this->exemptionProofNum = $exemptionProofNum;
         $this->consent = 'Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja Soltvadkert önkormányzatának';
         $this->hash = spl_object_hash($this);
+        $this->id = $id;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getName(): string
@@ -129,7 +137,8 @@ class Contact
             $data['departure_date'] ?? '',
             $data['exemption'] ?? '',
             $data['exemption_proof_type'] ?? '',
-            $data['exemption_proof_num'] ?? ''
+            $data['exemption_proof_num'] ?? '',
+            $data['id'] ?? ''
         );
     }
 }
