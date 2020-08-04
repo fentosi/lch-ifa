@@ -56,14 +56,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?
+                    <?php
                     foreach($groupedContacts as $regNum => $guests) {
                         echo '
                         <tr> <td><input type="checkbox" name="regnum"></td> <td width="100">' . $regNum . '</td> <td><table>';
                         foreach ($guests as $guest) {
                             echo '
                             <tr>
-                                <td><input type="checkbox" value="' . $guest['id'] . '" class="guest-id"></td>
+                                <td><input type="checkbox" name="id[]" value="' . $guest['id'] . '" class="guest-id"></td>
                                 <td width="200">' . $guest['name'] . '</td>
                                 <td width="50" >' . $guest['zip'] . '</td>
                                 <td width="150">' . $guest['arrival_date'] . '</td>
