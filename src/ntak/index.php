@@ -63,6 +63,11 @@
     </head>
     <body>
         <div class="container">
+            <?php
+            foreach($errors as $error) {
+                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+            }
+            ?>
             <form method="post" action="index.php">
                 <input type="submit" class="btn btn-primary fixed" value="Bekuld">
                 <table class="table">
