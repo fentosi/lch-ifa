@@ -23,7 +23,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                name, zip, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num
+                id, name, zip, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num
             FROM 
                 ifa
             WHERE 
@@ -49,7 +49,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                name, zip, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num
+                id, name, zip, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num
             FROM 
                 ifa
             WHERE 
