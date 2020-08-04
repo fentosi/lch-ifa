@@ -44,6 +44,32 @@ class ContactRepository
         return $result->fetch_assoc();
     }
 
+    public function getById(int $id)
+    {
+        if (!($statement = $this->mysqli->prepare(
+            "
+            SELECT
+                name, zip, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num
+            FROM 
+                ifa
+            WHERE 
+                id = ?"))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('d', $id);
+
+        if (!$statement->execute()) {
+            throw new Exception("Execute failed");
+        }
+
+        if (!($result = $statement->get_result())) {
+            throw new Error("Getting result set failed");
+        }
+
+        return $result->fetch_assoc();
+    }
+
     public function getAllWithoutReservation()
     {
         $query = "
