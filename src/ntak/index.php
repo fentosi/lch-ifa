@@ -8,11 +8,29 @@
     require_once ('../includes/dbConnection.php');
     require_once ('../includes/Contact.php');
     require_once ('../includes/ContactRepository.php');
-
-    $error = [];
+    require_once ('../includes/FelhoMatracClient.php');
 
     $contactRepository = new ContactRepository($mysqli);
 
+    $errors = [];
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $felhoMatracClient = new FelhoMatracClient($_ENV['FELHOMATRAC_CUSTOMER'], $_ENV['FELHOMATRAC_TOKEN']);
+
+        if (isset($_POST['id'])) {
+            $contacts = [];
+            foreach($_POST['id'] as $id) {
+                $contacts[] = Contact::createFrom($contactRepository->getById($id));
+            }
+
+            try {
+                $reservationHash = $felhoMatracClient->makeReservation($contacts);
+            } catch (Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+    }
 
     $contacts = $contactRepository->getAllWithoutReservation();
 
