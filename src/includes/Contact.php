@@ -50,7 +50,7 @@ class Contact
         $this->exemption = $exemption;
         $this->exemptionProofType = $exemptionProofType;
         $this->exemptionProofNum = $exemptionProofNum;
-        $this->consent = 'Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja Soltvadkert önkormányzatának';
+        $this->consent = 'Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja a Nemzeti Turisztikai Adatszolgáltató Központ (NTAK) felé';
         $this->hash = spl_object_hash($this);
         $this->id = $id;
     }
