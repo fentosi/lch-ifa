@@ -138,7 +138,7 @@ class Contact
             $data['exemption'] ?? '',
             $data['exemption_proof_type'] ?? '',
             $data['exemption_proof_num'] ?? '',
-            $data['id'] ?? ''
+            $data['id'] ?? null
         );
     }
 }
