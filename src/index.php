@@ -69,12 +69,12 @@
                 <form method="POST" id="reg_form" action="index.php">
                     <input type="hidden" name="token" id="token">
                     <div class="row">
-                        <div class="three columns">
+                        <div class="four columns">
                             <label>Családi név</label>
                             <input type="text" class="u-full-width" id="last_name" name="last_name" value="<?=getEscapedValue('last_name', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
-                        <div class="three columns">
+                        <div class="four columns">
                             <label>Utónév</label>
                             <input type="text" class="u-full-width" id="first_name" name="first_name" value="<?=getEscapedValue('first_name', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
@@ -85,26 +85,31 @@
                             <input type="text" class="u-full-width" id="zip" name="zip" value="<?=getEscapedValue('zip', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
-                        <div class="four columns">
-                            <label>Gépjármű Rendszám</label>
-                            <input type="text" class="u-full-width" id="reg_num" name="reg_num" value="<?=getEscapedValue('regNum', $contact)?>">
+                        <div class="two columns">
+                            <label>Város</label>
+                            <input type="text" class="u-full-width" id="city" name="city" value="<?=getEscapedValue('city', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="four columns">
-                            <label>Születési idő (ÉÉÉÉ.HH.NN.)</label>
+                        <div class="three columns">
+                            <label>Születési idő <small>(ÉÉÉÉ.HH.NN.)</small></label>
                             <input type="text" pattern="([12]\d{3}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01]))" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>" data-toggle="datepicker" autocomplete="off">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
-                        <div class="four columns">
+                        <div class="three columns">
                             <label>Állampolgárság</label>
                             <input type="text" class="u-full-width" id="nationality" name="nationality" value="<?=getEscapedValue('nationality', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
-                        <div class="four columns">
-                            <label>Szemelyi igazolvany szám</label>
+                        <div class="three columns">
+                            <label>Szemelyi igazolvany</label>
                             <input type="text" class="u-full-width" id="id_number" name="id_number" value="<?=getEscapedValue('idNumber', $contact)?>">
+                            <div class="error">A mező kitöltése kötelező</div>
+                        </div>
+                        <div class="three columns">
+                            <label>Gépjármű Rendszám</label>
+                            <input type="text" class="u-full-width" id="reg_num" name="reg_num" value="<?=getEscapedValue('regNum', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                     </div>
