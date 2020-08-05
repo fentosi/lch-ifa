@@ -23,7 +23,8 @@
     const isFormValid = function() {
         let isValid = true;
         const requiredIDs = [
-            'name',
+            'last_name',
+            'first_name',
             'zip',
             'reg_num',
             'dob',

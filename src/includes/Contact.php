@@ -3,7 +3,8 @@
 
 class Contact
 {
-    private $name;
+    private $last_name;
+    private $first_name;
     private $zip;
     private $regNum;
     private $dob;
@@ -19,7 +20,8 @@ class Contact
     private $id;
 
     public function __construct(
-        string $name,
+        string $last_name,
+        string $first_name,
         string $zip,
         string $regNum,
         string $dob,
@@ -33,7 +35,8 @@ class Contact
         int $id = null
         )
     {
-        $this->name = $name;
+        $this->last_name = $last_name;
+        $this->first_name = $first_name;
         $this->zip = $zip;
         $this->regNum = $regNum;
         $this->dob = $dob;
@@ -54,9 +57,14 @@ class Contact
         return $this->id;
     }
 
-    public function getName(): string
+    public function getLastName(): string
     {
-        return $this->name;
+        return $this->last_name;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->first_name;
     }
 
     public function getZip(): string
@@ -127,7 +135,8 @@ class Contact
     public static function createFrom(array $data)
     {
         return new Contact(
-            $data['name'] ?? '',
+            $data['last_name'] ?? '',
+            $data['first_name'] ?? '',
             $data['zip'] ?? '',
             $data['reg_num'] ?? '',
             $data['dob'] ?? '',

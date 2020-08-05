@@ -25,7 +25,7 @@ class IFAMaker
 
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1560, $black, self::FONT, $this->contact->getArrivalDate());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1660, $black, self::FONT, $this->contact->getDepartureDate());
-        imagettftext($this->image, self::FONT_SIZE, 0, 830, 1760, $black, self::FONT, $this->contact->getName());
+        imagettftext($this->image, self::FONT_SIZE, 0, 830, 1760, $black, self::FONT, $this->contact->getLastName() . ' ' . $this->contact->getFirstName());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1860, $black, self::FONT, $this->contact->getDob());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1960, $black, self::FONT, $this->contact->getZip());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 2060, $black, self::FONT, $this->contact->getNationality());

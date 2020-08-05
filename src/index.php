@@ -5,7 +5,7 @@
     $dotenv = Dotenv\Dotenv::create(__DIR__);
     $dotenv->load();
 
-//    require_once ('includes/dbConnection.php');
+    require_once ('includes/dbConnection.php');
     require_once ('includes/recaptcha.php');
     require_once ('includes/Contact.php');
     require_once ('includes/ContactRepository.php');
@@ -69,11 +69,17 @@
                 <form method="POST" id="reg_form" action="index.php">
                     <input type="hidden" name="token" id="token">
                     <div class="row">
-                        <div class="six columns">
-                            <label>Név</label>
-                            <input type="text" class="u-full-width" id="name" name="name" value="<?=getEscapedValue('name', $contact)?>">
+                        <div class="three columns">
+                            <label>Családi név</label>
+                            <input type="text" class="u-full-width" id="last_name" name="last_name" value="<?=getEscapedValue('last_name', $contact)?>">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
+                        <div class="three columns">
+                            <label>Utónév</label>
+                            <input type="text" class="u-full-width" id="first_name" name="first_name" value="<?=getEscapedValue('first_name', $contact)?>">
+                            <div class="error">A mező kitöltése kötelező</div>
+                        </div>
+
                         <div class="two columns">
                             <label>Irsz</label>
                             <input type="text" class="u-full-width" id="zip" name="zip" value="<?=getEscapedValue('zip', $contact)?>">
@@ -176,6 +182,6 @@
             });
         });
     </script>
-    <script src="scripts/scripts.js"></script>
+    <script src="scripts/scripts.js?202008050756"></script>
     </body>
 </html>

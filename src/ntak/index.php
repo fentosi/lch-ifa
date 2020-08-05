@@ -87,7 +87,7 @@
                             echo '
                             <tr>
                                 <td><input type="checkbox" name="id[]" value="' . $guest['id'] . '" class="guest-id"></td>
-                                <td width="200">' . $guest['name'] . '</td>
+                                <td width="200">' . $guest['last_name'] . ' ' . $guest['first_name'] . '</td>
                                 <td width="50" >' . $guest['zip'] . '</td>
                                 <td width="150">' . $guest['arrival_date'] . '</td>
                                 <td width="150">' . $guest['departure_date'] . '</td>
