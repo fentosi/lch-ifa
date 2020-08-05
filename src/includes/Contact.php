@@ -6,6 +6,7 @@ class Contact
     private $last_name;
     private $first_name;
     private $zip;
+    private $city;
     private $regNum;
     private $dob;
     private $nationality;
@@ -23,6 +24,7 @@ class Contact
         string $last_name,
         string $first_name,
         string $zip,
+        string $city,
         string $regNum,
         string $dob,
         string $nationality,
@@ -38,6 +40,7 @@ class Contact
         $this->last_name = $last_name;
         $this->first_name = $first_name;
         $this->zip = $zip;
+        $this->city = $city;
         $this->regNum = $regNum;
         $this->dob = $dob;
         $this->nationality = $nationality;
@@ -70,6 +73,11 @@ class Contact
     public function getZip(): string
     {
         return $this->zip;
+    }
+
+    public function getCity(): string
+    {
+        return $this->city;
     }
 
     public function getRegNum(): string
@@ -138,6 +146,7 @@ class Contact
             $data['last_name'] ?? '',
             $data['first_name'] ?? '',
             $data['zip'] ?? '',
+            $data['city'] ?? '',
             $data['reg_num'] ?? '',
             $data['dob'] ?? '',
             $data['nationality'] ?? '',
