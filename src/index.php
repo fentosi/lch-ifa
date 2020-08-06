@@ -94,7 +94,7 @@
                     <div class="row">
                         <div class="three columns">
                             <label>Születési idő <small>(ÉÉÉÉ.HH.NN.)</small></label>
-                            <input type="text" pattern="([12]\d{3}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01]))" class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>" data-toggle="datepicker" autocomplete="off">
+                            <input type="text" pattern="([12]\d{3}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01]))\." class="u-full-width" id="dob" name="dob" value="<?=getEscapedValue('dob', $contact)?>" data-toggle="datepicker" autocomplete="off">
                             <div class="error">A mező kitöltése kötelező</div>
                         </div>
                         <div class="three columns">
