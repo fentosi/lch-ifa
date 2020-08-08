@@ -48,14 +48,34 @@ class FelhoMatracClient
             throw new Error('Error');
         }
 
+        $debitId = $this->addDebitToReservation($contacts, $reservationId);
+
         return [
-            'reservationHash' => $reservationHash,
-            'roomId' => $roomId
+            'reservationId' => $reservationId,
+            'roomId' => $roomId,
+            'debitId' => $debitId
         ];
     }
 
+    public function addDebitToReservation(array $contacts, string $reservationHash) {
+        $debitId = Uuid::uuid4()->toString();
 
-    private function getReservationBody(array $contacts, string $reservationHash): array {
+        $response = $this->client->post('/debit', [
+            'body' => $this->getDebitBody($debitId, $reservationHash, $contacts),
+            'headers' => $this->getRequestHeaders()
+        ]);
+
+        $code = $response->getStatusCode();
+
+        if ($code !== 200) {
+            throw new Error('Error');
+        }
+
+        return $debitId;
+    }
+
+
+    private function getReservationBody(array $contacts, string $reservationId, string $roomId): array {
         return [
             'resNr' => 'FOGL001',
             'resId' => $reservationHash,
@@ -125,5 +145,41 @@ class FelhoMatracClient
             'bedId' => 1,
             'bedName' => 'Satorhely'
         ];
+    }
+
+    private function getDebitBody(string $debitId, string $reservationId, array $contacts)
+    {
+        $now = new DateTime();
+        return [
+            'debitId' => $debitId,
+            'resId' => $reservationId,
+            'productId' => 'Satorhely 1',
+            'productName' => 'Satorhely',
+            'productVat' => 0.27,
+            'productNtak' => 'SZALLASDIJ',
+            'consTime' => $now->format('Y-m-d H:i:s'),
+            'currency' => 'HUF',
+            'amount' => $this->getDebitAmount($contacts),
+        ];
+    }
+
+    private function getDebitAmount(array $contacts)
+    {
+        $amount = 0;
+        $dailyPrice = $_ENV['ACCOMODATION_DAILY_PRICE'];
+
+        foreach ($contacts as $contact) {
+            $amount += ($this->getDaysBettwenDates($contact->getDepartureDate(), $contact->getArrivalDate()) + 1) * $dailyPrice;
+        }
+
+        return $amount;
+    }
+
+    private function getDaysBettwenDates($departureDate, $arrivalDate)
+    {
+        $earlier = new DateTime($arrivalDate);
+        $later = new DateTime($departureDate);
+
+        return $later->diff($earlier)->format("%a");
     }
 }
