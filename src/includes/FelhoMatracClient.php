@@ -19,7 +19,7 @@ class FelhoMatracClient
     public function makeRooom() {
         $roomId = Uuid::uuid4();
 
-        $response = $this->client->post('/reservation', [
+        $response = $this->client->post('/room', [
             'body' => $this->getRoomBody($roomId),
             'headers' => $this->getRequestHeaders()
         ]);
