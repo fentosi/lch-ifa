@@ -4,6 +4,7 @@
     "require": {
         "php": "^7.0.3",
         "guzzlehttp/guzzle": "^6.5",
+        "ramsey/uuid": "^3.9",
         "vlucas/phpdotenv": "^3.4"
     },
     "config": {
