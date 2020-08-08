@@ -78,7 +78,7 @@ class ContactRepository
             FROM 
                 ifa
             WHERE 
-                reservation IS NULL
+                reservation_id IS NULL
             ORDER BY reg_num";
 
         if ($result = $this->mysqli->query($query)) {
