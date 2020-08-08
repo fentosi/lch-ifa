@@ -1,13 +1,12 @@
 <?php
 
 use GuzzleHttp\Client;
+use Ramsey\Uuid\Uuid;
 
 class FelhoMatracClient
 {
     private $token;
     private $client;
-
-    const ROOM_ID = '9b89a01a-bc7e-45e7-8506-ab04010fadaf';
 
     public function __construct(string $customer, string $token)
     {
@@ -17,11 +16,11 @@ class FelhoMatracClient
         ]);
     }
 
-    public function makeReservation(array $contacts) {
-        $reservationHash = $this->getReservationHash($contacts);
+    public function makeRooom() {
+        $roomId = Uuid::uuid4();
 
         $response = $this->client->post('/reservation', [
-            'body' => $this->getReservationBody($contacts, $reservationHash),
+            'body' => $this->getRoomBody($roomId),
             'headers' => $this->getRequestHeaders()
         ]);
 
@@ -31,7 +30,28 @@ class FelhoMatracClient
             throw new Error('Error');
         }
 
-        return $reservationHash;
+        return $roomId;
+    }
+
+    public function makeReservation(array $contacts) {
+        $roomId = $this->makeRooom();
+        $reservationHash = $this->getReservationHash($contacts);
+
+        $response = $this->client->post('/reservation', [
+            'body' => $this->getReservationBody($contacts, $reservationHash, $roomId),
+            'headers' => $this->getRequestHeaders()
+        ]);
+
+        $code = $response->getStatusCode();
+
+        if ($code !== 200) {
+            throw new Error('Error');
+        }
+
+        return [
+            'reservationHash' => $reservationHash,
+            'roomId' => $roomId
+        ];
     }
 
 
@@ -82,6 +102,28 @@ class FelhoMatracClient
         return [
             'Accept'  => 'application/json',
             'Authorization' => 'Bearer ' . $this->token
+        ];
+    }
+
+    private function getRoomBody($roomId)
+    {
+        return [
+            'unitName' => $_ENV['FELHOMATRAC_UNIT_NAME'],
+            'unitCode' => $_ENV['FELHOMATRAC_UNIT_CODE'],
+            'unitId' => $_ENV['FELHOMATRAC_UNIT_ID'],
+            'catName' => 'Satorhely',
+            'catNtak' => 'SATORHELY_KEMPINGHELY',
+            'catDbeds' => 10,
+            'catSbeds' => 0,
+            'catId' => 1,
+            'buildingName' => 'Satorhely',
+            'buildingId' => 1,
+            'type' => 'bed',
+            'roomName' => 'Satorhely',
+            'roomEbeds' => 10,
+            'roomId' => $roomId,
+            'bedId' => 1,
+            'bedName' => 'Satorhely'
         ];
     }
 }
