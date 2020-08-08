@@ -17,7 +17,7 @@ class FelhoMatracClient
     }
 
     public function makeRooom() {
-        $roomId = Uuid::uuid4();
+        $roomId = Uuid::uuid4()->toString();
 
         $response = $this->client->post('/room', [
             'body' => $this->getRoomBody($roomId),
@@ -35,10 +35,10 @@ class FelhoMatracClient
 
     public function makeReservation(array $contacts) {
         $roomId = $this->makeRooom();
-        $reservationHash = $this->getReservationHash($contacts);
+        $reservationId = Uuid::uuid4()->toString();
 
         $response = $this->client->post('/reservation', [
-            'body' => $this->getReservationBody($contacts, $reservationHash, $roomId),
+            'body' => $this->getReservationBody($contacts, $reservationId, $roomId),
             'headers' => $this->getRequestHeaders()
         ]);
 
@@ -78,7 +78,7 @@ class FelhoMatracClient
     private function getReservationBody(array $contacts, string $reservationId, string $roomId): array {
         return [
             'resNr' => 'FOGL001',
-            'resId' => $reservationHash,
+            'resId' => $reservationId,
             'status' => 50,
             'checkin' => $contacts[0]->getArrivalDate(),
             'checkout' => $contacts[0]->getDepartureDate(),
@@ -86,7 +86,7 @@ class FelhoMatracClient
             'channelName' => 'Channel 1',
             'channelNTAK' => 'KOZVETITO_ONLINE',
             'custRes' => 'HU',
-            'roomId' => '',
+            'roomId' => $roomId,
             'guests' => $this->getReservationGuests($contacts)
         ];
     }
@@ -95,8 +95,8 @@ class FelhoMatracClient
         return array_map(function($contact) {
             return [
                 'guestId' => $contact->getId(),
-                'firstName' => $contact->getName(),
-                'lastName' => $contact->getName(),
+                'firstName' => $contact->getFirstName(),
+                'lastName' => $contact->getLastName(),
                 'gender' => 'EGYEB_VAGY_NEM_ISMERT',
                 'zip' => $contact->getZip(),
                 'city' => 'Budapest',
@@ -108,16 +108,6 @@ class FelhoMatracClient
         }, $contacts);
     }
 
-    private function getReservationHash(array $contacts): string {
-        $concatenatedHash = '';
-
-        array_walk($contacts, function($contact, $key, &$hash) {
-            $hash .= $contact->getHash();
-        }, $concatenatedHash);
-
-        return md5($concatenatedHash);
-    }
-
     private function getRequestHeaders(): array {
         return [
             'Accept'  => 'application/json',
@@ -125,7 +115,7 @@ class FelhoMatracClient
         ];
     }
 
-    private function getRoomBody($roomId)
+    private function getRoomBody(string $roomId)
     {
         return [
             'unitName' => $_ENV['FELHOMATRAC_UNIT_NAME'],
