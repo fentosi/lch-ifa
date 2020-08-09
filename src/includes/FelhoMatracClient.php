@@ -1,6 +1,8 @@
 <?php
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 
 class FelhoMatracClient
@@ -12,23 +14,16 @@ class FelhoMatracClient
     {
         $this->token = $token;
         $this->client = new Client([
-            'base_uri' => "https://$customer.felhomatrac.hu/api"
+            'base_uri' => "https://$customer.felhomatrac.com/api"
         ]);
     }
 
     public function makeRooom() {
         $roomId = Uuid::uuid4()->toString();
 
-        $response = $this->client->post('/room', [
-            'body' => $this->getRoomBody($roomId),
-            'headers' => $this->getRequestHeaders()
-        ]);
+        $response = $this->sendPostRequest('/room', $this->getRoomBody($roomId));
 
-        $code = $response->getStatusCode();
-
-        if ($code !== 200) {
-            throw new Error('Error');
-        }
+        $this->isResponseOK($response);
 
         return $roomId;
     }
@@ -37,16 +32,11 @@ class FelhoMatracClient
         $roomId = $this->makeRooom();
         $reservationId = Uuid::uuid4()->toString();
 
-        $response = $this->client->post('/reservation', [
-            'body' => $this->getReservationBody($contacts, $reservationId, $roomId),
-            'headers' => $this->getRequestHeaders()
-        ]);
+        $response = $this->sendPostRequest(
+            '/reservation',
+            $this->getReservationBody($contacts, $reservationId, $roomId));
 
-        $code = $response->getStatusCode();
-
-        if ($code !== 200) {
-            throw new Error('Error');
-        }
+        $this->isResponseOK($response);
 
         $debitId = $this->addDebitToReservation($contacts, $reservationId);
 
@@ -60,16 +50,9 @@ class FelhoMatracClient
     public function addDebitToReservation(array $contacts, string $reservationHash) {
         $debitId = Uuid::uuid4()->toString();
 
-        $response = $this->client->post('/debit', [
-            'body' => $this->getDebitBody($debitId, $reservationHash, $contacts),
-            'headers' => $this->getRequestHeaders()
-        ]);
+        $response = $this->sendPostRequest('/debit', $this->getDebitBody($debitId, $reservationHash, $contacts));
 
-        $code = $response->getStatusCode();
-
-        if ($code !== 200) {
-            throw new Error('Error');
-        }
+        $this->isResponseOK($response);
 
         return $debitId;
     }
@@ -79,7 +62,7 @@ class FelhoMatracClient
         return [
             'resNr' => 'FOGL001',
             'resId' => $reservationId,
-            'status' => 50,
+            'status' => 10,
             'checkin' => $contacts[0]->getArrivalDate(),
             'checkout' => $contacts[0]->getDepartureDate(),
             'channelId' => 'CH1',
@@ -126,7 +109,7 @@ class FelhoMatracClient
             'catDbeds' => 10,
             'catSbeds' => 0,
             'catId' => 1,
-            'buildingName' => 'Satorhely',
+            'buildingName' => 'Kemping',
             'buildingId' => 1,
             'type' => 'bed',
             'roomName' => 'Satorhely',
@@ -159,17 +142,35 @@ class FelhoMatracClient
         $dailyPrice = $_ENV['ACCOMODATION_DAILY_PRICE'];
 
         foreach ($contacts as $contact) {
-            $amount += ($this->getDaysBettwenDates($contact->getDepartureDate(), $contact->getArrivalDate()) + 1) * $dailyPrice;
+            $amount += ($this->getDaysBetweenDates($contact->getDepartureDate(), $contact->getArrivalDate()) + 1) * $dailyPrice;
         }
 
         return $amount;
     }
 
-    private function getDaysBettwenDates($departureDate, $arrivalDate)
+    private function sendPostRequest(string $uri, array $body): ResponseInterface
+    {
+        $request = new Request('POST', $uri, $this->getRequestHeaders(), json_encode($body));
+
+        $response = $this->client->send($request);
+
+        return $response;
+    }
+
+    private function isResponseOK(ResponseInterface $response)
+    {
+        $code = $response->getStatusCode();
+
+        if ($code !== 200) {
+            throw new Error('Error');
+        }
+    }
+
+    private function getDaysBetweenDates($departureDate, $arrivalDate): int
     {
         $earlier = new DateTime($arrivalDate);
         $later = new DateTime($departureDate);
 
-        return $later->diff($earlier)->format("%a");
+        return intval($later->diff($earlier)->format("%a"));
     }
 }
