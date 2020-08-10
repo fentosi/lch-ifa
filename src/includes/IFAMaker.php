@@ -1,5 +1,7 @@
 <?php
 
+require_once('includes/Countries.php');
+
 class IFAMaker
 {
     const FILE = 'IFABejelento2020.jpg';
@@ -23,12 +25,14 @@ class IFAMaker
         $this->image = imagecreatefromjpeg(self::FILE);
         $black = imagecolorallocate($this->image, 0, 0, 0);
 
+        $country_name = Countries::EU[$this->contact->getNationality()]['name'];
+
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1560, $black, self::FONT, $this->contact->getArrivalDate());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1660, $black, self::FONT, $this->contact->getDepartureDate());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1760, $black, self::FONT, $this->contact->getLastName() . ' ' . $this->contact->getFirstName());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1860, $black, self::FONT, $this->contact->getDob());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1960, $black, self::FONT, $this->contact->getZip());
-        imagettftext($this->image, self::FONT_SIZE, 0, 830, 2060, $black, self::FONT, $this->contact->getNationality());
+        imagettftext($this->image, self::FONT_SIZE, 0, 830, 2060, $black, self::FONT, $country_name);
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 2200, $black, self::FONT, $this->contact->getIdNumber());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 2340, $black, self::FONT, $this->contact->getRegNum());
 
