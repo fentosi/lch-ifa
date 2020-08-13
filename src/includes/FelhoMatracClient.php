@@ -121,8 +121,8 @@ class FelhoMatracClient
         return [
             'debitId' => $reservation->getDebitHash(),
             'resId' => $reservation->getReservationHash(),
-            'productId' => 'Satorhely 1',
-            'productName' => 'Satorhely',
+            'productId' => 'Satorhely' . $reservation->getId(),
+            'productName' => 'Satorhely ' . $reservation->getId(),
             'productVat' => 0.27,
             'productNtak' => 'SZALLASDIJ',
             'consTime' => $now->format('Y-m-d H:i:s'),
