@@ -18,6 +18,7 @@ class Contact
     private $exemptionProofNum;
     private $consent;
     private $hash;
+    private $reservationId;
     private $id;
 
     public function __construct(
@@ -34,6 +35,7 @@ class Contact
         string $exemption,
         string $exemptionProofType,
         string $exemptionProofNum,
+        int $reservationId = null,
         int $id = null
         )
     {
@@ -53,6 +55,7 @@ class Contact
         $this->consent = 'Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja a Nemzeti Turisztikai Adatszolgáltató Központ (NTAK) felé';
         $this->hash = spl_object_hash($this);
         $this->id = $id;
+        $this->reservationId = $reservationId;
     }
 
     public function getId(): int
@@ -136,6 +139,11 @@ class Contact
         return $this->hash;
     }
 
+    public function getReservationId(): int
+    {
+        return $this->reservationId;
+    }
+
     public function get($key) {
         return $this->$key;
     }
@@ -156,6 +164,7 @@ class Contact
             $data['exemption'] ?? '',
             $data['exemption_proof_type'] ?? '',
             $data['exemption_proof_num'] ?? '',
+            $data['reservation_id'] ?? null,
             $data['id'] ?? null
         );
     }
