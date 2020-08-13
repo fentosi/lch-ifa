@@ -28,8 +28,13 @@ class FelhoMatracClient
     }
 
     public function makeReservation(Reservation $reservation, array $contacts): Reservation {
-        $reservation->setReservationHash(Uuid::uuid4()->toString());
-        $reservation = $this->makeRooom($reservation);
+        if (empty($reservation->getReservationHash())) {
+            $reservation->setReservationHash(Uuid::uuid4()->toString());
+        }
+
+        if (empty($reservation->getRoomHash())) {
+            $reservation = $this->makeRooom($reservation);
+        }
 
         $response = $this->sendPostRequest(
             '/reservation',
@@ -37,7 +42,9 @@ class FelhoMatracClient
 
         $this->isResponseOK($response);
 
-        $reservation = $this->addDebitToReservation($contacts, $reservation);
+        if (empty($reservation->getDebitHash())) {
+            $reservation = $this->addDebitToReservation($contacts, $reservation);
+        }
 
         return $reservation;
     }
