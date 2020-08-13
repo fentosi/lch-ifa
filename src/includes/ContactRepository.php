@@ -94,9 +94,13 @@ class ContactRepository
     {
         $query = "
             SELECT
-                id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, status
             FROM 
                 ifa
+            LEFT JOIN 
+                ifa_reservation
+            ON
+                ifa_reservation.id = ifa.reservation_id
             WHERE 
                 reservation_id IS NULL
             ORDER BY reg_num";
