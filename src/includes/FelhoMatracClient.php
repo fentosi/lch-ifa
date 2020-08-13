@@ -83,7 +83,7 @@ class FelhoMatracClient
                 'countryOfRes' => $contact->getNationality(),
                 'countryOfNat' => $contact->getNationality(),
                 'dob' => $dob->format('Y-m-d'),
-                'ntakttax' => 'KOTELES'
+                'ntakttax' => $this->getTaxExemption($contact->getExemption())
             ];
         }, $contacts);
     }
@@ -167,5 +167,21 @@ class FelhoMatracClient
         $later = new DateTime($departureDate);
 
         return intval($later->diff($earlier)->format("%a"));
+    }
+
+    private function getTaxExemption($exemption)
+    {
+        $ntakException = 'KOTELES';
+
+        switch ($exemption) {
+            case 'Kiskoru':
+                $ntakException = 'im1';
+                break;
+            case 'Soltvadkerti':
+                $ntakException = 'im10';
+                break;
+        }
+
+        return $ntakException;
     }
 }
