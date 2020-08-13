@@ -41,16 +41,9 @@
         }
     }
 
-    $contacts = $contactRepository->getAllWithoutReservation();
+    $contacts = $contactRepository->getAllWithReservationData();
 
-    $groupedContacts = [];
-    foreach($contacts as $contact) {
-        if (!isset($groupedContacts[$contact['reg_num']])) {
-           $groupedContacts[$contact['reg_num']] = [];
-        }
-
-        $groupedContacts[$contact['reg_num']][] = $contact;
-    }
+    $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,16 +52,9 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
 
-        <title>NTAK - LadaClubHungary</title>
+        <title>NTAK</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <style>
-            .btn.fixed {
-                position: fixed;
-                top: 5px;
-                right: 5px;
-            }
-        </style>
     </head>
     <body>
         <div class="container">
@@ -77,49 +63,35 @@
                 echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
             }
             ?>
-            <form method="post" action="index.php">
-                <input type="submit" class="btn btn-primary fixed" value="Bekuld">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Rendszam</th>
-                        <th>Vendegek</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach($groupedContacts as $regNum => $guests) {
-                        echo '
-                        <tr> <td><input type="checkbox" name="regnum"></td> <td width="100">' . $regNum . '</td> <td><table>';
-                        foreach ($guests as $guest) {
-                            echo '
-                            <tr>
-                                <td><input type="checkbox" name="id[]" value="' . $guest['id'] . '" class="guest-id"></td>
-                                <td width="200">' . $guest['last_name'] . ' ' . $guest['first_name'] . '</td>
-                                <td width="50" >' . $guest['zip'] . '</td>
-                                <td width="150">' . $guest['arrival_date'] . '</td>
-                                <td width="150">' . $guest['departure_date'] . '</td>
-                            </tr>';
-                        }
-                        echo '</table></td></tr>';
-                    }
-                    ?>
-                    </tbody>
-                </table>
-            </form>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Rendszam</th>
+                    <th>Vendeg</th>
+                    <th>IRSZ</th>
+                    <th>Erkezes</th>
+                    <th>Tavozas</th>
+                    <th>Foglalasi statusz</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($contacts as $contact) {
+                    echo '
+                    <tr> 
+                        <td width="100">' . $contact['reg_num'] . '</td>
+                        <td width="200">' . $contact['last_name'] . ' ' . $contact['first_name'] . '</td>
+                        <td width="50" >' . $contact['zip'] . '</td>
+                        <td width="150">' . $contact['arrival_date'] . '</td>
+                        <td width="150">' . $contact['departure_date'] . '</td>
+                        <td width="50">' . $statusText[$contact['status']] . '</td>
+                     </tr>';
+                }
+
+                echo '</table>';
+                ?>
+                </tbody>
+            </table>
         </div>
     </body>
-
-    <script src="../scripts/jquery-3.4.1.slim.min.js"></script>
-    <script>
-        $(document).ready(() => {
-            $('input[name="regnum"]').click(function() {
-                const me = $(this);
-                me.parent().next().next().find('input').each(function(key, cbox) {
-                    $(cbox).prop('checked', me.is(':checked'));
-                });
-            });
-        });
-    </script>
 </html>

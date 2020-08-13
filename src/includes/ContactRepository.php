@@ -70,7 +70,7 @@ class ContactRepository
         return $result->fetch_assoc();
     }
 
-    public function getAll()
+    public function getAllWithReservationData()
     {
         $query = "
             SELECT
