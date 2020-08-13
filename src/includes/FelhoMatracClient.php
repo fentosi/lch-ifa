@@ -9,13 +9,13 @@ class FelhoMatracClient
 {
     private $token;
     private $client;
+    private $customer;
 
     public function __construct(string $customer, string $token)
     {
         $this->token = $token;
-        $this->client = new Client([
-            'base_uri' => "https://$customer.felhomatrac.com/api"
-        ]);
+        $this->customer = $customer;
+        $this->client = new Client();
     }
 
     public function makeRooom() {
@@ -150,7 +150,7 @@ class FelhoMatracClient
 
     private function sendPostRequest(string $uri, array $body): ResponseInterface
     {
-        $request = new Request('POST', $uri, $this->getRequestHeaders(), json_encode($body));
+        $request = new Request('POST', "https://{$this->customer}.felhomatrac.com/api" . $uri, $this->getRequestHeaders(), json_encode($body));
 
         $response = $this->client->send($request);
 
