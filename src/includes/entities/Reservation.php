@@ -76,9 +76,9 @@ class Reservation
         if (!($statement = $this->mysqli->prepare(
             "INSERT INTO 
                     ifa_reservation
-                        (reservation_hash, debit_hash, room_hash, status)
+                        (id, reservation_hash, debit_hash, room_hash, status)
                     VALUES
-                        (?, ?, ?, ?)
+                        (?, ?, ?, ?, ?)
                     ON DUPLICATE KEY UPDATE
                        reservation_hash = ?,
                        debit_hash = ?,
@@ -89,13 +89,15 @@ class Reservation
         }
 
 
+        $reservationId = $this->getId();
         $reservationHash = $this->getReservationHash();
         $debitHash = $this->getDebitHash();
         $roomHash = $this->getRoomHash();
         $status = $this->getStatus();
 
         $statement->bind_param(
-            'sssdsssd',
+            'dsssdsssd',
+            $reservationId,
             $reservationHash,
             $debitHash,
             $roomHash,
@@ -114,6 +116,18 @@ class Reservation
         $statement->close();
 
         $this->setId($this->mysqli->insert_id);
+    }
+
+    public static function createFrom(mysqli $mysqli, array $data): Reservation
+    {
+        $reservation = new Reservation($mysqli);
+
+        return $reservation
+            ->setId($data['id'])
+            ->setReservationHash($data['reservation_hash'])
+            ->setRoomHash($data['room_hash'])
+            ->setDebitHash($data['debit_hash'])
+            ->setStatus($data['status']);
     }
 
 
