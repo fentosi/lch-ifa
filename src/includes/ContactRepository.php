@@ -112,6 +112,32 @@ class ContactRepository
         }
     }
 
+    public function updateContactReservation(Contact $contact, int $reservationId) {
+        if (!($statement = $this->mysqli->prepare(
+            "
+                    UPDATE
+                        ifa
+                    SET
+                        reservation_id = ? 
+                    WHERE
+                        id = ?
+                        "))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $contactId = $contact->getId();
+
+        $statement->bind_param('dd', $reservationId, $contactId);
+
+        if (!$statement->execute()) {
+            $statement->close();
+            throw new Exception("Databases insert error");
+        }
+
+        $statement->close();
+
+    }
+
     public function saveContact(Contact $contact)
     {
         if (!($statement = $this->mysqli->prepare(
