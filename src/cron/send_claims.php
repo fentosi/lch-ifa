@@ -16,6 +16,8 @@ require_once ('../includes/FelhoMatracClient.php');
 $contactRepository = new ContactRepository($mysqli);
 $felhoMatracClient = new FelhoMatracClient($_ENV['FELHOMATRAC_CUSTOMER'], $_ENV['FELHOMATRAC_TOKEN']);
 
+$errors = [];
+
 try {
     $contacts = $contactRepository->getAllWithoutReservation();
 
