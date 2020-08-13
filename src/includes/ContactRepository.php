@@ -90,6 +90,36 @@ class ContactRepository
         }
     }
 
+    public function getAllWithReservationDataByStatus(int $status)
+    {
+        if (!($statement = $this->mysqli->prepare(
+            "
+            SELECT
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, status
+            FROM 
+                ifa
+            LEFT JOIN 
+                ifa_reservation
+            ON
+                ifa_reservation.id = ifa.reservation_id
+            WHERE 
+                status = ?"))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('d', $status);
+
+        if (!$statement->execute()) {
+            throw new Exception("Execute failed");
+        }
+
+        if (!($result = $statement->get_result())) {
+            throw new Error("Getting result set failed");
+        }
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getAllWithoutReservation()
     {
         $query = "
