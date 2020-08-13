@@ -70,6 +70,26 @@ class ContactRepository
         return $result->fetch_assoc();
     }
 
+    public function getAll()
+    {
+        $query = "
+            SELECT
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, status
+            FROM 
+                ifa
+            LEFT JOIN 
+                ifa_reservation
+            ON
+                ifa_reservation.id = ifa.reservation_id
+            ORDER BY last_name";
+
+        if ($result = $this->mysqli->query($query)) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            throw new Exception("Execute failed");
+        }
+    }
+
     public function getAllWithoutReservation()
     {
         $query = "
