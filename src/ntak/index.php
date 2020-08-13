@@ -8,38 +8,9 @@
     require_once ('../includes/dbConnection.php');
     require_once('../includes/entities/Contact.php');
     require_once ('../includes/ContactRepository.php');
-    require_once('../includes/entities/Reservation.php');
     require_once ('../includes/ReservationStatuses.php');
-    require_once ('../includes/ReservationRepository.php');
-    require_once ('../includes/FelhoMatracClient.php');
 
     $contactRepository = new ContactRepository($mysqli);
-    $reservationRepository = new ReservationRepository($mysqli);
-
-    $errors = [];
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        $felhoMatracClient = new FelhoMatracClient($_ENV['FELHOMATRAC_CUSTOMER'], $_ENV['FELHOMATRAC_TOKEN']);
-
-        if (isset($_POST['id'])) {
-            $contacts = [];
-            foreach($_POST['id'] as $id) {
-                $contacts[] = Contact::createFrom($contactRepository->getById($id));
-            }
-
-            try {
-                $reservation = new Reservation($mysqli);
-                $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED])->save();
-                $reservation = $felhoMatracClient->makeReservation($reservation, $contacts);
-                $reservation->save();
-
-
-            } catch (Exception $e) {
-                $errors[] = $e->getMessage();
-            }
-        }
-    }
 
     $contacts = $contactRepository->getAllWithReservationData();
 
@@ -58,11 +29,6 @@
     </head>
     <body>
         <div class="container">
-            <?php
-            foreach($errors as $error) {
-                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-            }
-            ?>
             <table class="table">
                 <thead>
                 <tr>
@@ -84,7 +50,7 @@
                         <td width="50" >' . $contact['zip'] . '</td>
                         <td width="150">' . $contact['arrival_date'] . '</td>
                         <td width="150">' . $contact['departure_date'] . '</td>
-                        <td width="50">' . $statusText[$contact['status']] . '</td>
+                        <td width="50">' . (isset($contact['status']) ? $statusText[$contact['status']] : '' ) . '</td>
                      </tr>';
                 }
 
