@@ -6,11 +6,15 @@
     $dotenv->load();
 
     require_once ('../includes/dbConnection.php');
-    require_once ('../includes/Contact.php');
+    require_once('../includes/entities/Contact.php');
     require_once ('../includes/ContactRepository.php');
+    require_once('../includes/entities/Reservation.php');
+    require_once ('../includes/ReservationStatuses.php');
+    require_once ('../includes/ReservationRepository.php');
     require_once ('../includes/FelhoMatracClient.php');
 
     $contactRepository = new ContactRepository($mysqli);
+    $reservationRepository = new ReservationRepository($mysqli);
 
     $errors = [];
 
@@ -25,7 +29,12 @@
             }
 
             try {
-                $reservationHash = $felhoMatracClient->makeReservation($contacts);
+                $reservation = new Reservation($mysqli);
+                $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED])->save();
+                $reservation = $felhoMatracClient->makeReservation($reservation, $contacts);
+                $reservation->save();
+
+
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }

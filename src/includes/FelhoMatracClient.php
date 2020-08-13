@@ -18,64 +18,61 @@ class FelhoMatracClient
         $this->client = new Client();
     }
 
-    public function makeRooom() {
-        $roomId = Uuid::uuid4()->toString();
+    public function makeRooom(Reservation $reservation): Reservation {
+        $reservation->setRoomHash(Uuid::uuid4()->toString());
 
-        $response = $this->sendPostRequest('/room', $this->getRoomBody($roomId));
-
+        $response = $this->sendPostRequest('/room', $this->getRoomBody($reservation));
         $this->isResponseOK($response);
 
-        return $roomId;
+        return $reservation;
     }
 
-    public function makeReservation(array $contacts) {
-        $roomId = $this->makeRooom();
-        $reservationId = Uuid::uuid4()->toString();
+    public function makeReservation(Reservation $reservation, array $contacts): Reservation {
+        $reservation->setReservationHash(Uuid::uuid4()->toString());
+        $reservation = $this->makeRooom($reservation);
 
         $response = $this->sendPostRequest(
             '/reservation',
-            $this->getReservationBody($contacts, $reservationId, $roomId));
+            $this->getReservationBody($contacts, $reservation));
 
         $this->isResponseOK($response);
 
-        $debitId = $this->addDebitToReservation($contacts, $reservationId);
+        $reservation = $this->addDebitToReservation($contacts, $reservation);
 
-        return [
-            'reservationId' => $reservationId,
-            'roomId' => $roomId,
-            'debitId' => $debitId
-        ];
+        return $reservation;
     }
 
-    public function addDebitToReservation(array $contacts, string $reservationHash) {
-        $debitId = Uuid::uuid4()->toString();
+    public function addDebitToReservation(array $contacts, Reservation $reservation): Reservation {
+        $reservation->setDebitHash(Uuid::uuid4()->toString());
 
-        $response = $this->sendPostRequest('/debit', $this->getDebitBody($debitId, $reservationHash, $contacts));
+        $response = $this->sendPostRequest('/debit', $this->getDebitBody($reservation, $contacts));
 
         $this->isResponseOK($response);
 
-        return $debitId;
+        return $reservation;
     }
 
 
-    private function getReservationBody(array $contacts, string $reservationId, string $roomId): array {
+    private function getReservationBody(array $contacts, Reservation $reservation): array {
         return [
-            'resNr' => 'FOGL001',
-            'resId' => $reservationId,
-            'status' => 10,
+            'resNr' => 'FOGL' . $reservation->getId(),
+            'resId' => $reservation->getReservationHash(),
+            'status' => $reservation->getStatus(),
             'checkin' => $contacts[0]->getArrivalDate(),
             'checkout' => $contacts[0]->getDepartureDate(),
             'channelId' => 'CH1',
             'channelName' => 'Channel 1',
             'channelNTAK' => 'KOZVETITO_ONLINE',
-            'custRes' => 'HU',
-            'roomId' => $roomId,
+            'custRes' => $contacts[0]->getNationality(),
+            'roomId' => $reservation->getRoomHash(),
             'guests' => $this->getReservationGuests($contacts)
         ];
     }
 
     private function getReservationGuests(array $contacts): array {
         return array_map(function($contact) {
+            $dob = DateTime::createFromFormat('Y.m.d.', $contact->getDob());
+
             return [
                 'guestId' => $contact->getId(),
                 'firstName' => $contact->getFirstName(),
@@ -83,9 +80,9 @@ class FelhoMatracClient
                 'gender' => 'EGYEB_VAGY_NEM_ISMERT',
                 'zip' => $contact->getZip(),
                 'city' => 'Budapest',
-                'countryOfRes' => 'HU',
-                'countryOfNat' => 'DE',
-                'dob' => $contact->getDob(),
+                'countryOfRes' => $contact->getNationality(),
+                'countryOfNat' => $contact->getNationality(),
+                'dob' => $dob->format('Y-m-d'),
                 'ntakttax' => 'KOTELES'
             ];
         }, $contacts);
@@ -98,7 +95,7 @@ class FelhoMatracClient
         ];
     }
 
-    private function getRoomBody(string $roomId)
+    private function getRoomBody(Reservation $reservation)
     {
         return [
             'unitName' => $_ENV['FELHOMATRAC_UNIT_NAME'],
@@ -111,21 +108,19 @@ class FelhoMatracClient
             'catId' => 1,
             'buildingName' => 'Kemping',
             'buildingId' => 1,
-            'type' => 'bed',
-            'roomName' => 'Satorhely',
+            'type' => 'room',
+            'roomName' => 'Satorhely' . $reservation->getId(),
             'roomEbeds' => 10,
-            'roomId' => $roomId,
-            'bedId' => 1,
-            'bedName' => 'Satorhely'
+            'roomId' => $reservation->getRoomHash()
         ];
     }
 
-    private function getDebitBody(string $debitId, string $reservationId, array $contacts)
+    private function getDebitBody(Reservation $reservation, array $contacts)
     {
         $now = new DateTime();
         return [
-            'debitId' => $debitId,
-            'resId' => $reservationId,
+            'debitId' => $reservation->getDebitHash(),
+            'resId' => $reservation->getReservationHash(),
             'productId' => 'Satorhely 1',
             'productName' => 'Satorhely',
             'productVat' => 0.27,

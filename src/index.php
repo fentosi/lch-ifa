@@ -7,7 +7,7 @@
 
     require_once('includes/dbConnection.php');
     require_once('includes/recaptcha.php');
-    require_once('includes/Contact.php');
+    require_once('includes/entities/Contact.php');
     require_once('includes/ContactRepository.php');
     require_once('includes/Countries.php');
 
