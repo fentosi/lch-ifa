@@ -28,8 +28,8 @@ class FelhoMatracClient
     }
 
     public function makeReservation(Reservation $reservation, array $contacts): Reservation {
-        if ($reservation->getStatus() !== null) {
-            throw new Error('Wrong status for make a reservation!');
+        if ($reservation->getStatus() !== "") {
+            throw new Exception('Wrong status for make a reservation!');
         }
 
         $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]);
@@ -54,8 +54,8 @@ class FelhoMatracClient
     }
 
     public function setArrivalForReservation(Reservation $reservation, array $contacts): Reservation {
-        if ($reservation->getStatus() !== ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]) {
-            throw new Error('Wrong status for set arrival!');
+        if ($reservation->getStatus() != ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]) {
+            throw new Exception('Rossz status az erkezes beallitasahoz' . $reservation->getStatus());
         }
 
         $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]);
@@ -71,8 +71,8 @@ class FelhoMatracClient
     }
 
     public function setDepartureForReservation(Reservation $reservation, array $contacts): Reservation {
-        if ($reservation->getStatus() !== ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]) {
-            throw new Error('Wrong status for set arrival!');
+        if ($reservation->getStatus() != ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]) {
+            throw new Exception('Rossz status a tavozas beallitasahoz');
         }
 
         $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::DEPARTED]);
@@ -202,7 +202,7 @@ class FelhoMatracClient
         $code = $response->getStatusCode();
 
         if ($code !== 200) {
-            throw new Error('Error');
+            throw new Exception('Error');
         }
     }
 
