@@ -1,20 +1,76 @@
 <?php
-    ini_set('display_errors', 'on');
-    require_once ('../vendor/autoload.php');
+ini_set('display_errors', 'on');
+require_once ('../vendor/autoload.php');
 
-    $dotenv = Dotenv\Dotenv::create('../');
-    $dotenv->load();
+$dotenv = Dotenv\Dotenv::create('../');
+$dotenv->load();
 
-    require_once ('../includes/dbConnection.php');
-    require_once('../includes/entities/Contact.php');
-    require_once ('../includes/ContactRepository.php');
-    require_once ('../includes/ReservationStatuses.php');
+$errors = [];
 
-    $contactRepository = new ContactRepository($mysqli);
+require_once ('../includes/dbConnection.php');
+require_once('../includes/entities/Contact.php');
+require_once('../includes/entities/Reservation.php');
+require_once ('../includes/ContactRepository.php');
+require_once ('../includes/ReservationRepository.php');
+require_once ('../includes/ReservationStatuses.php');
+require_once ('../includes/FelhoMatracClient.php');
 
-    $contacts = $contactRepository->getAllWithReservationData();
 
-    $statusText = array_flip(ReservationStatuses::STATUS_CODES);
+$contactRepository = new ContactRepository($mysqli);
+$reservationRepository = new ReservationRepository($mysqli);
+$felhoMatracClient = new FelhoMatracClient($_ENV['FELHOMATRAC_CUSTOMER'], $_ENV['FELHOMATRAC_TOKEN']);
+
+function validateDate(string $date, string $type) {
+    $today = new DateTimeImmutable();
+    $prevDay = $today->modify('-1 day');
+
+    if ($date !== $prevDay->format('Y-m-d') && $date !== $today->format('Y-m-d')) {
+        throw new Exception($type . ' napja mai vagy tegnapi lehet');
+    }
+}
+
+if (isset($_GET['action']) && isset($_GET['contactId'])) {
+    try {
+        $contact = $contactRepository->getById(intval($_GET['contactId']));
+        $contact = Contact::createFrom($contact);
+
+
+        switch($_GET['action']) {
+            case 'claim':
+                $reservation = new Reservation($mysqli);
+                $reservation->save();
+                $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
+
+                //update contact
+                $contactRepository->updateContactReservation($contact, $reservation->getId());
+
+                break;
+            case 'arrival':
+                validateDate($contact->getArrivalDate(), 'Erkezes');
+
+                $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($contact->getReservationId()));
+                $reservation = $felhoMatracClient->setArrivalForReservation($reservation, [$contact]);
+
+                break;
+            case 'departure':
+                validateDate($contact->getDepartureDate(), 'Tavozas');
+
+                $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($contact->getReservationId()));
+                $reservation = $felhoMatracClient->setDepartureForReservation($reservation, [$contact]);
+
+                break;
+        }
+    } catch (Exception $e) {
+        $errors[] = $e->getMessage();
+    }
+}
+
+
+
+
+$contacts = $contactRepository->getAllWithReservationData();
+
+$statusText = array_flip(ReservationStatuses::STATUS_CODES);
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,6 +85,11 @@
     </head>
     <body>
         <div class="container">
+            <?php
+            foreach($errors as $error) {
+                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+            }
+            ?>
             <table class="table">
                 <thead>
                 <tr>
@@ -38,11 +99,27 @@
                     <th>Erkezes</th>
                     <th>Tavozas</th>
                     <th>Foglalasi statusz</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 foreach($contacts as $contact) {
+                    switch($contact['status']) {
+                        case null:
+                            $actionLink = './index.php?action=claim&contactId=' . $contact['id'];
+                            $actionText = 'Igenyles';
+                            break;
+                        case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
+                            $actionLink = './index.php?action=arrival&contactId=' . $contact['id'];
+                            $actionText = 'Erkezes';
+                            break;
+                        case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
+                            $actionLink = './index.php?action=departure&contactId=' . $contact['id'];
+                            $actionText = 'Tavozas';
+                            break;
+                    }
+
                     echo '
                     <tr> 
                         <td width="100">' . $contact['reg_num'] . '</td>
@@ -51,6 +128,7 @@
                         <td width="150">' . $contact['arrival_date'] . '</td>
                         <td width="150">' . $contact['departure_date'] . '</td>
                         <td width="50">' . (isset($contact['status']) ? $statusText[$contact['status']] : '' ) . '</td>
+                        <td width="50"> ' . (!empty($actionLink) ? '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>' : '') .'</td>
                      </tr>';
                 }
 
