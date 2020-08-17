@@ -24,9 +24,8 @@ try {
     foreach ($contacts as $contact) {
         $contact = Contact::createFrom($contact);
         $reservation = new Reservation($mysqli);
-        $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED])->save();
-        $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
         $reservation->save();
+        $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
 
         //update contact
         $contactRepository->updateContactReservation($contact, $reservation->getId());

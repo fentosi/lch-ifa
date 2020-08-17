@@ -30,9 +30,7 @@ try {
     foreach ($departedContacts as $contact) {
         $contact = Contact::createFrom($contact);
         $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($contact->getReservationId()));
-        $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::DEPARTED])->save();
-        $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
-        $reservation->save();
+        $reservation = $felhoMatracClient->setDepartureForReservation($reservation, [$contact]);
     }
 } catch (Exception $e) {
     $errors[] = $e->getMessage();

@@ -28,13 +28,15 @@ class FelhoMatracClient
     }
 
     public function makeReservation(Reservation $reservation, array $contacts): Reservation {
-        if (empty($reservation->getReservationHash())) {
-            $reservation->setReservationHash(Uuid::uuid4()->toString());
+        if ($reservation->getStatus() !== null) {
+            throw new Error('Wrong status for make a reservation!');
         }
 
-        if (empty($reservation->getRoomHash())) {
-            $reservation = $this->makeRooom($reservation);
-        }
+        $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]);
+
+        $reservation->setReservationHash(Uuid::uuid4()->toString());
+
+        $reservation = $this->makeRooom($reservation);
 
         $response = $this->sendPostRequest(
             '/reservation',
@@ -46,6 +48,42 @@ class FelhoMatracClient
             $reservation = $this->addDebitToReservation($contacts, $reservation);
         }
 
+        $reservation->save();
+
+        return $reservation;
+    }
+
+    public function setArrivalForReservation(Reservation $reservation, array $contacts): Reservation {
+        if ($reservation->getStatus() !== ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]) {
+            throw new Error('Wrong status for set arrival!');
+        }
+
+        $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]);
+
+        $response = $this->sendPostRequest(
+            '/reservation',
+            $this->getReservationBody($contacts, $reservation));
+
+        $this->isResponseOK($response);
+
+        $reservation->save();
+        return $reservation;
+    }
+
+    public function setDepartureForReservation(Reservation $reservation, array $contacts): Reservation {
+        if ($reservation->getStatus() !== ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]) {
+            throw new Error('Wrong status for set arrival!');
+        }
+
+        $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::DEPARTED]);
+
+        $response = $this->sendPostRequest(
+            '/reservation',
+            $this->getReservationBody($contacts, $reservation));
+
+        $this->isResponseOK($response);
+
+        $reservation->save();
         return $reservation;
     }
 
