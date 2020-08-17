@@ -33,7 +33,7 @@ class ReservationRepository
         }
 
         if (!($result = $statement->get_result())) {
-            throw new Error("Getting result set failed");
+            throw new Exception("Getting result set failed");
         }
 
         return $result->fetch_assoc();
