@@ -1,6 +1,8 @@
 <?php
 
 ini_set('display_errors', 'on');
+ini_set('max_execution_time', 0);
+
 require_once('../../vendor/autoload.php');
 
 $dotenv = Dotenv\Dotenv::create('../');
