@@ -5,7 +5,7 @@ ini_set('max_execution_time', 0);
 
 require_once('../../vendor/autoload.php');
 
-$dotenv = Dotenv\Dotenv::create('../');
+$dotenv = Dotenv\Dotenv::create('../../');
 $dotenv->load();
 
 require_once('../../includes/dbConnection.php');
