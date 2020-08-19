@@ -1,18 +1,19 @@
 <?php
 
 ini_set('display_errors', 'on');
-require_once ('../vendor/autoload.php');
+
+require_once('../../vendor/autoload.php');
 
 $dotenv = Dotenv\Dotenv::create('../');
 $dotenv->load();
 
-require_once ('../includes/dbConnection.php');
-require_once('../includes/entities/Contact.php');
-require_once ('../includes/ContactRepository.php');
-require_once ('../includes/ReservationRepository.php');
-require_once('../includes/entities/Reservation.php');
-require_once ('../includes/ReservationStatuses.php');
-require_once ('../includes/FelhoMatracClient.php');
+require_once('../../includes/dbConnection.php');
+require_once('../../includes/entities/Contact.php');
+require_once('../../includes/ContactRepository.php');
+require_once('../../includes/ReservationRepository.php');
+require_once('../../includes/entities/Reservation.php');
+require_once('../../includes/ReservationStatuses.php');
+require_once('../../includes/FelhoMatracClient.php');
 
 $contactRepository = new ContactRepository($mysqli);
 $reservationRepository = new ReservationRepository($mysqli);
