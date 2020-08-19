@@ -59,6 +59,9 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
                 $reservation = $felhoMatracClient->setDepartureForReservation($reservation, [$contact]);
 
                 break;
+            case 'delete':
+                $contactRepository->deleteContact($contact->getId());
+                break;
         }
     } catch (Exception $e) {
         $errors[] = $e->getMessage();
@@ -120,15 +123,25 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                             break;
                     }
 
+                    $buttons = '';
+                    if (!empty($actionLink) && is_null($contact['deleted'])) {
+                        $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
+                    }
+
+                    if (is_null($contact['deleted'])) {
+                        $deleteLink = './index.php?action=delete&contactId=' . $contact['id'];
+                        $buttons .= '<a href="' . $deleteLink .'" class="btn btn-danger" role="button">Torles</a>';
+                    }
+
                     echo '
-                    <tr> 
+                    <tr ' . (!is_null($contact['deleted']) ? 'class="table-secondary"' : '') . '> 
                         <td width="100">' . $contact['reg_num'] . '</td>
                         <td width="200">' . $contact['last_name'] . ' ' . $contact['first_name'] . '</td>
                         <td width="50" >' . $contact['zip'] . '</td>
                         <td width="150">' . $contact['arrival_date'] . '</td>
                         <td width="150">' . $contact['departure_date'] . '</td>
                         <td width="50">' . (isset($contact['status']) ? $statusText[$contact['status']] : '' ) . '</td>
-                        <td width="50"> ' . (!empty($actionLink) ? '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>' : '') .'</td>
+                        <td width="50"> ' . $buttons . '</td>
                      </tr>';
                 }
 
