@@ -41,7 +41,7 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
                 $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
 
                 //update contact
-                $contactRepository->updateContactReservation($contact, $reservation->getId());
+                $contactRepository->updateContactReservation($contact->getId(), $reservation->getId());
 
                 break;
             case 'arrival':

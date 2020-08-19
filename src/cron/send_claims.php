@@ -28,7 +28,7 @@ try {
         $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
 
         //update contact
-        $contactRepository->updateContactReservation($contact, $reservation->getId());
+        $contactRepository->updateContactReservation($contact->getId(), $reservation->getId());
     }
 } catch (Exception $e) {
     $errors[] = $e->getMessage();

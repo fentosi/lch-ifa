@@ -146,7 +146,7 @@ class ContactRepository
         }
     }
 
-    public function updateContactReservation(Contact $contact, int $reservationId) {
+    public function updateContactReservation(int $contactId, int $reservationId) {
         if (!($statement = $this->mysqli->prepare(
             "
                     UPDATE
@@ -158,8 +158,6 @@ class ContactRepository
                         "))) {
             throw new Exception("SQL Statement error");
         }
-
-        $contactId = $contact->getId();
 
         $statement->bind_param('dd', $reservationId, $contactId);
 
