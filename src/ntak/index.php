@@ -34,7 +34,6 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
         $contact = $contactRepository->getById(intval($_GET['contactId']));
         $contact = Contact::createFrom($contact);
 
-
         switch($_GET['action']) {
             case 'claim':
                 $reservation = new Reservation($mysqli);
@@ -67,9 +66,6 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
         $errors[] = $e->getMessage();
     }
 }
-
-
-
 
 $contacts = $contactRepository->getAllWithReservationData();
 

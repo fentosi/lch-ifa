@@ -74,7 +74,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id,  status
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, deleted, status
             FROM 
                 ifa
             LEFT JOIN 
@@ -103,6 +103,8 @@ class ContactRepository
             ON
                 ifa_reservation.id = ifa.reservation_id
             WHERE 
+                deleted IS NULL
+            AND
                 status = ?"))) {
             throw new Exception("SQL Statement error");
         }
@@ -133,6 +135,8 @@ class ContactRepository
                 ifa_reservation.id = ifa.reservation_id
             WHERE 
                 reservation_id IS NULL
+            AND
+                deleted IS NULL
             ORDER BY reg_num";
 
         if ($result = $this->mysqli->query($query)) {
