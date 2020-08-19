@@ -121,7 +121,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 
                     $buttons = '';
                     if (!empty($actionLink) && is_null($contact['deleted'])) {
-                        $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
+                        $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>&nbsp;';
                     }
 
                     if (is_null($contact['deleted'])) {
@@ -134,10 +134,10 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         <td width="100">' . $contact['reg_num'] . '</td>
                         <td width="200">' . $contact['last_name'] . ' ' . $contact['first_name'] . '</td>
                         <td width="50" >' . $contact['zip'] . '</td>
-                        <td width="150">' . $contact['arrival_date'] . '</td>
-                        <td width="150">' . $contact['departure_date'] . '</td>
+                        <td width="100">' . $contact['arrival_date'] . '</td>
+                        <td width="100">' . $contact['departure_date'] . '</td>
                         <td width="50">' . (isset($contact['status']) ? $statusText[$contact['status']] : '' ) . '</td>
-                        <td width="50"> ' . $buttons . '</td>
+                        <td width="120"> ' . $buttons . '</td>
                      </tr>';
                 }
 
