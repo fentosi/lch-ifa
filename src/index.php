@@ -44,7 +44,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
 
-    <title>Regisztracio - LadaClubHungary</title>
+    <title>Regisztracio - RCS</title>
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/skeleton.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -52,18 +52,17 @@
 <body>
 <header>
     <div class="container">
-        <img src="images/lchlogo.png" alt="LadaClubHungary Logo">
+        <img src="images/rcs.png" alt="RCS Logo">
     </div>
 </header>
 
 <div class="content">
     <div class="container">
-        <h3 style="text-align: center">NTAK - Bejelentő lap</h3>
+        <h3 style="text-align: center">NTAK - Szállásbejelentő lap</h3>
         <p>
-            Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni
-            a rendezvényre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
+            Kérünk, hogyha a BMW találkozón fogsz megszállni valamelyik kempingező területen, akkor töltsd ki ezt a bejelentőlapot, és hozd magaddal: Kitöltés után le tudod itt tölteni, melyet kérünk, hogy nyomtass ki, esetleg másold a telefonodra, hogy a belépéskor fel tudd mutatni!
             <br/><br/>
-            Kitöltés után le tudod tölteni a bejelentőlapot, melyet kerünk, hogy nyomtass ki és hozz magaddal.
+            Ez törvényi kötelezettség, sajnos enélkül nem tudunk beengedni. Ha nem sikerülne, akkor a beléptető kapunál is biztosítunk majd bejelentőlapot, de úgy mindenkinek tovább fog tartani a bejutás!
         </p>
         <p class="<?= (count($error) ? 'has-error' : '') ?>">
             <?= implode('<br /><br />', $error) ?>
@@ -123,7 +122,7 @@
                     <div class="error">A mező kitöltése kötelező</div>
                 </div>
                 <div class="three columns">
-                    <label>Szemelyi igazolvany</label>
+                    <label>Személyi igazolvány</label>
                     <input type="text" class="u-full-width" id="id_number" name="id_number"
                            value="<?= getEscapedValue('idNumber', $contact) ?>">
                     <div class="error">A mező kitöltése kötelező</div>
@@ -141,13 +140,22 @@
                     2020. augusztus
                     <select id="arrival_date" name="arrival_date">
                         <option value=""></option>
-                        <option value="27" <?= (getEscapedValue('arrivalDate', $contact) == 27 ? 'selected' : '') ?>>27.
+                        <option value="17" <?= (getEscapedValue('arrivalDate', $contact) == 17 ? 'selected' : '') ?>>17.
+                            hétfő
+                        </option>
+                        <option value="18" <?= (getEscapedValue('arrivalDate', $contact) == 18 ? 'selected' : '') ?>>18.
+                            kedd
+                        </option>
+                        <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == 19 ? 'selected' : '') ?>>19.
+                            szerda
+                        </option>
+                        <option value="20" <?= (getEscapedValue('arrivalDate', $contact) == 20 ? 'selected' : '') ?>>20.
                             csütörtök
                         </option>
-                        <option value="28" <?= (getEscapedValue('arrivalDate', $contact) == 28 ? 'selected' : '') ?>>28.
+                        <option value="21" <?= (getEscapedValue('arrivalDate', $contact) == 21 ? 'selected' : '') ?>>21.
                             péntek
                         </option>
-                        <option value="29" <?= (getEscapedValue('arrivalDate', $contact) == 29 ? 'selected' : '') ?>>29.
+                        <option value="22" <?= (getEscapedValue('arrivalDate', $contact) == 22 ? 'selected' : '') ?>>22.
                             szombat
                         </option>
                     </select>
@@ -158,14 +166,23 @@
                     2020. augusztus
                     <select id="departure_date" name="departure_date">
                         <option value=""></option>
-                        <option value="28" <?= (getEscapedValue('departureDate', $contact) == 28 ? 'selected' : '') ?>>
-                            28. péntek
+                        <option value="18" <?= (getEscapedValue('departureDate', $contact) == 18 ? 'selected' : '') ?>>18.
+                            kedd
                         </option>
-                        <option value="29" <?= (getEscapedValue('departureDate', $contact) == 29 ? 'selected' : '') ?>>
-                            29. szombat
+                        <option value="19" <?= (getEscapedValue('departureDate', $contact) == 19 ? 'selected' : '') ?>>19.
+                            szerda
                         </option>
-                        <option value="30" <?= (getEscapedValue('departureDate', $contact) == 30 ? 'selected' : '') ?>>
-                            30. vasárnap
+                        <option value="20" <?= (getEscapedValue('departureDate', $contact) == 20 ? 'selected' : '') ?>>20.
+                            csütörtök
+                        </option>
+                        <option value="21" <?= (getEscapedValue('departureDate', $contact) == 21 ? 'selected' : '') ?>>21.
+                            péntek
+                        </option>
+                        <option value="22" <?= (getEscapedValue('departureDate', $contact) == 22 ? 'selected' : '') ?>>22.
+                            szombat
+                        </option>
+                        <option value="23" <?= (getEscapedValue('departureDate', $contact) == 23 ? 'selected' : '') ?>>23.
+                            vasárnap
                         </option>
                     </select>
                     <div class="error">A mező kitöltése kötelező</div>
@@ -206,7 +223,7 @@
                 <div class="twelve columns">
                     <input type="checkbox" name="tcs" id="tcs" class="u-pull-left"
                            style="margin-top: 0.5em; margin-right: 1em;">
-                    <label for="tcs">Hozzájárulok, hogy az adataimat a LadaClubHungary kezelje és továbbadja a Nemzeti
+                    <label for="tcs">Hozzájárulok, hogy az adataimat az RCS Power Kft. kezelje és továbbadja a Nemzeti
                         Turisztikai Adatszolgáltató Központ (NTAK) felé</label>
                     <div class="error">Hozzájárulásod szükséges a bejelentőlap kitöltéséhez</div>
                 </div>
@@ -221,7 +238,7 @@
                 (NTAK) felé.
             </p>
             <p class="small">
-                LadaClubHungary kijelenti, hogy az alábbi bejelentőlapon feltüntetett adatokat a jogszabályi
+                Az RCS Power Kft. kijelenti, hogy az alábbi bejelentőlapon feltüntetett adatokat a jogszabályi
                 előírásoknak megfelelően kizárólag az NTAK felé történő adatszolgáltatásra használja fel, utána azt
                 megsemmisíti.
             </p>

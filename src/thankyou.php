@@ -5,7 +5,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
 
-        <title>IFA - LadaClubHungary</title>
+        <title>Reg - RCS</title>
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
 	    <link rel="stylesheet" type="text/css" href="css/skeleton.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -13,7 +13,7 @@
     <body>
         <header>
             <div class="container">
-	            <img src="images/lchlogo.png" alt="LadaClubHungary Logo">
+	            <img src="images/rcs.png" alt="RCS Logo">
             </div>
         </header>
 
@@ -24,13 +24,13 @@
                 </p>
                 <br />
                 <p>
-                    Kérünk, hogy a mielőbbi bejutás érdekében a bejelentőlapot kinyomtatva és alaírva hozd magaddal.
+                    Köszönjük!  Kérünk, hogy a mielőbbi bejutás érdekében a bejelentőlapot kinyomtatva/mobilon felmutatva hozd magaddal!
                     <br /><br />
                     A kitöltött bejelentőlapot <a href="ifa.php?hash=<?=$_GET['hash']?>">INNEN</a> tudod letölteni!
                     <br /><br />
-                    Várunk 2020. augusztus 28-30 között Soltvadkerten, a 19. országos Ladatalálkozón!
+                    Várunk 2020. augusztus 19-23 között Soltvadkerten a BMW találkozón!
                     <br /><br />
-                    Az LCH csapata
+                    Az RCS csapata
                 </p>
             </div>
     </div>

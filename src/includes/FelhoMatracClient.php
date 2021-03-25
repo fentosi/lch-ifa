@@ -44,7 +44,7 @@ class FelhoMatracClient
 
         $this->isResponseOK($response);
 
-        $reservation = $this->addDebitToReservation($contacts, $reservation);
+        //$reservation = $this->addDebitToReservation($contacts, $reservation);
 
         $reservation->save();
 

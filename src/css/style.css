@@ -1,6 +1,7 @@
 body {
     background-color: #010000;
     color: #fff;
+    margin-top: 2em;
 }
 
 .datepicker-panel {
@@ -46,7 +47,7 @@ label {
 }
 
 .orange {
-    color: #e06734;
+    color: red;
 }
 
 .has-error {
@@ -66,7 +67,7 @@ label {
 .button,
 input[type="button"].button-primary,
 input[type="submit"] {
-    background-color: #e06734;
+    background-color: red;
     border: 1px solid white;
     color: white;
 }
@@ -83,7 +84,7 @@ input[type="submit"]:hover,
 .button.button-primary:focus,
 input[type="button"].button-primary:focus,
 input[type="submit"]:focus {
-    border: 1px solid #e06734;
-    color: #e06734;
+    border: 1px solid red;
+    color: red;
     background-color: #fff;
 }

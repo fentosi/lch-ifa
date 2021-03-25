@@ -4,8 +4,8 @@ require_once('includes/Countries.php');
 
 class IFAMaker
 {
-    const FILE = 'IFABejelento2020.jpg';
-    const FONT = '/var/www/ladaclubhungary.hu/ifa/ArialCE.ttf';
+    const FILE = 'IFABejelento2020RCS.jpg';
+    const FONT = '/var/www/regisztracio.rcs.hu/ArialCE.ttf';
     const FONT_SIZE = 45;
 
     /**
