@@ -137,25 +137,16 @@
             <div class="row">
                 <div class="six columns">
                     <label>Érkezés napja</label>
-                    2020. augusztus
+                    2021. június
                     <select id="arrival_date" name="arrival_date">
                         <option value=""></option>
                         <option value="17" <?= (getEscapedValue('arrivalDate', $contact) == 17 ? 'selected' : '') ?>>17.
-                            hétfő
-                        </option>
-                        <option value="18" <?= (getEscapedValue('arrivalDate', $contact) == 18 ? 'selected' : '') ?>>18.
-                            kedd
-                        </option>
-                        <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == 19 ? 'selected' : '') ?>>19.
-                            szerda
-                        </option>
-                        <option value="20" <?= (getEscapedValue('arrivalDate', $contact) == 20 ? 'selected' : '') ?>>20.
                             csütörtök
                         </option>
-                        <option value="21" <?= (getEscapedValue('arrivalDate', $contact) == 21 ? 'selected' : '') ?>>21.
+                        <option value="18" <?= (getEscapedValue('arrivalDate', $contact) == 18 ? 'selected' : '') ?>>18.
                             péntek
                         </option>
-                        <option value="22" <?= (getEscapedValue('arrivalDate', $contact) == 22 ? 'selected' : '') ?>>22.
+                        <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == 19 ? 'selected' : '') ?>>19.
                             szombat
                         </option>
                     </select>
@@ -163,26 +154,17 @@
                 </div>
                 <div class="six columns">
                     <label>Távozás napja</label>
-                    2020. augusztus
+                    2021. június
                     <select id="departure_date" name="departure_date">
                         <option value=""></option>
                         <option value="18" <?= (getEscapedValue('departureDate', $contact) == 18 ? 'selected' : '') ?>>18.
-                            kedd
+                          péntek
                         </option>
                         <option value="19" <?= (getEscapedValue('departureDate', $contact) == 19 ? 'selected' : '') ?>>19.
-                            szerda
+                          szombat
                         </option>
                         <option value="20" <?= (getEscapedValue('departureDate', $contact) == 20 ? 'selected' : '') ?>>20.
-                            csütörtök
-                        </option>
-                        <option value="21" <?= (getEscapedValue('departureDate', $contact) == 21 ? 'selected' : '') ?>>21.
-                            péntek
-                        </option>
-                        <option value="22" <?= (getEscapedValue('departureDate', $contact) == 22 ? 'selected' : '') ?>>22.
-                            szombat
-                        </option>
-                        <option value="23" <?= (getEscapedValue('departureDate', $contact) == 23 ? 'selected' : '') ?>>23.
-                            vasárnap
+                          vasárnap
                         </option>
                     </select>
                     <div class="error">A mező kitöltése kötelező</div>

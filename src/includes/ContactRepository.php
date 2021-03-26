@@ -15,7 +15,7 @@ class ContactRepository
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
-        $this->datePrefix = "2020-08-";
+        $this->datePrefix = "2021-06-";
     }
 
     public function getByHash(string $hash)
