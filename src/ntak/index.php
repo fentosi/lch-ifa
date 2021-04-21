@@ -68,7 +68,22 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
 }
 
 $contacts = $contactRepository->getAllWithReservationData();
+$groupedContacts = $unitCount = $roomCount = [];
+foreach ($contacts as $contact) {
+    if (isset($unitCount[$contact['unit']])) {
+        $unitCount[$contact['unit']]++;
+    } else {
+        $unitCount[$contact['unit']] = 1;
+    }
 
+    if (isset($roomCount[$contact['room']])) {
+        $roomCount[$contact['room']]++;
+    } else {
+        $roomCount[$contact['room']] = 1;
+    }
+
+    $groupedContacts[$contact['unit']][$contact['room']][] = $contact;
+}
 $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 ?>
 <!DOCTYPE html>
@@ -92,6 +107,8 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
             <table class="table">
                 <thead>
                 <tr>
+                    <th>Lakoegyseg</th>
+                    <th>Szoba</th>
                     <th>Rendszam</th>
                     <th>Vendeg</th>
                     <th>IRSZ</th>
@@ -103,44 +120,62 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 </thead>
                 <tbody>
                 <?php
-                foreach($contacts as $contact) {
-                    switch($contact['status']) {
-                        case null:
-                            $actionLink = './index.php?action=claim&contactId=' . $contact['id'];
-                            $actionText = 'Igenyles';
-                            break;
-                        case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
-                            $actionLink = './index.php?action=arrival&contactId=' . $contact['id'];
-                            $actionText = 'Erkezes';
-                            break;
-                        case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
-                            $actionLink = './index.php?action=departure&contactId=' . $contact['id'];
-                            $actionText = 'Tavozas';
-                            break;
-                    }
 
-                    $buttons = '';
-                    if (!empty($actionLink) && is_null($contact['deleted'])) {
-                        $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
-                    }
+                foreach ($groupedContacts as $unit => $rooms) {
+                  $unitTd = '<td rowspan="' . $unitCount[$unit] . '" width="100"> '. $unit .' </td>';
+                  foreach ($rooms as $room => $contacts) {
+                    $roomTd = '<td rowspan="' . $roomCount[$room] . '" width="100"> '. $room .' </td>';
+                    foreach ($contacts as $contact) {
+                        switch($contact['status']) {
+                            case null:
+                                $actionLink = './index.php?action=claim&contactId=' . $contact['id'];
+                                $actionText = 'Igenyles';
+                                break;
+                            case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
+                                $actionLink = './index.php?action=arrival&contactId=' . $contact['id'];
+                                $actionText = 'Erkezes';
+                                break;
+                            case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
+                                $actionLink = './index.php?action=departure&contactId=' . $contact['id'];
+                                $actionText = 'Tavozas';
+                                break;
+                        }
 
-                    if (is_null($contact['deleted'])) {
-                        $deleteLink = './index.php?action=delete&contactId=' . $contact['id'];
-                        $buttons .= '&nbsp;<a href="' . $deleteLink .'" class="btn btn-danger" role="button">Torles</a>';
-                    }
+                        $buttons = '';
+                        if (!empty($actionLink) && is_null($contact['deleted'])) {
+                            $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
+                        }
 
-                    echo '
-                    <tr ' . (!is_null($contact['deleted']) ? 'class="table-secondary"' : '') . '> 
+                        if (is_null($contact['deleted'])) {
+                            $deleteLink = './index.php?action=delete&contactId=' . $contact['id'];
+                            $buttons .= '&nbsp;<a href="' . $deleteLink .'" class="btn btn-danger" role="button">Torles</a>';
+                        }
+
+                        echo '
+                    <tr ' . (!is_null($contact['deleted']) ? 'class="table-secondary"' : '') . '>
+                    ';
+                        if (!empty($unitTd)) {
+                          echo $unitTd;
+                          $unitTd = '';
+                        }
+
+                        if (!empty($roomTd)) {
+                            echo $roomTd;
+                            $roomTd = '';
+                        }
+
+                        echo '
                         <td width="100">' . $contact['reg_num'] . '</td>
                         <td width="200">' . $contact['last_name'] . ' ' . $contact['first_name'] . '</td>
                         <td width="50" >' . $contact['zip'] . '</td>
-                        <td width="100">' . $contact['arrival_date'] . '</td>
-                        <td width="100">' . $contact['departure_date'] . '</td>
+                        <td width="120">' . $contact['arrival_date'] . '</td>
+                        <td width="120">' . $contact['departure_date'] . '</td>
                         <td width="50">' . (isset($contact['status']) ? $statusText[$contact['status']] : '' ) . '</td>
-                        <td width="150"> ' . $buttons . '</td>
+                        <td width="200"> ' . $buttons . '</td>
                      </tr>';
+                    }
+                  }
                 }
-
                 echo '</table>';
                 ?>
                 </tbody>
