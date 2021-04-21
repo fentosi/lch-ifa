@@ -3,6 +3,7 @@
 
 class ContactRepository
 {
+    const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, status, deleted';
     /**
      * @var mysqli
      */
@@ -23,7 +24,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id
+                " . self::FIELDS . "
             FROM 
                 ifa
             WHERE 
@@ -49,7 +50,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id
+                " . self::FIELDS . "
             FROM 
                 ifa
             WHERE 
@@ -74,7 +75,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, reservation_id, deleted, status
+                " . self::FIELDS . "
             FROM 
                 ifa
             LEFT JOIN 
@@ -95,7 +96,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, reservation_id, status
+                " . self::FIELDS . "
             FROM 
                 ifa
             LEFT JOIN 
@@ -126,7 +127,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, reservation_id, status
+                " . self::FIELDS . "
             FROM 
                 ifa
             LEFT JOIN 
