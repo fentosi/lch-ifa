@@ -74,7 +74,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, deleted, status
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, reservation_id, deleted, status
             FROM 
                 ifa
             LEFT JOIN 
@@ -95,7 +95,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, status
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, reservation_id, status
             FROM 
                 ifa
             LEFT JOIN 
@@ -126,7 +126,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, status
+                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, reservation_id, status
             FROM 
                 ifa
             LEFT JOIN 
@@ -197,9 +197,9 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "INSERT INTO 
                     ifa
-                        (last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
+                        (last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
                     VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )"))) {
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )"))) {
             throw new Exception("SQL Statement error");
         }
 
@@ -218,8 +218,10 @@ class ContactRepository
         $exemptionProofNum = $contact->getExemptionProofNum();
         $consent = $contact->getConsent();
         $hash = $contact->getHash();
+        $unit = $contact->getUnit();
+        $room = $contact->getRoom();
 
-        $statement->bind_param('sssssssssssssss', $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash);
+        $statement->bind_param('sssssssssssssssss', $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $unit, $room, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash);
 
         if (!$statement->execute()) {
 
