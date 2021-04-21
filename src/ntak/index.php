@@ -76,10 +76,11 @@ foreach ($contacts as $contact) {
         $unitCount[$contact['unit']] = 1;
     }
 
-    if (isset($roomCount[$contact['room']])) {
-        $roomCount[$contact['room']]++;
+    $roomUnitId = "{$contact['unit']}-{$contact['room']}";
+    if (isset($roomCount[$roomUnitId])) {
+        $roomCount[$roomUnitId]++;
     } else {
-        $roomCount[$contact['room']] = 1;
+        $roomCount[$roomUnitId] = 1;
     }
 
     $groupedContacts[$contact['unit']][$contact['room']][] = $contact;
@@ -94,6 +95,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
         <meta charset="UTF-8">
 
         <title>NTAK</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     </head>
     <body>
@@ -123,7 +125,8 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 foreach ($groupedContacts as $unit => $rooms) {
                   $unitTd = '<td rowspan="' . $unitCount[$unit] . '" width="100"> '. $unit .' </td>';
                   foreach ($rooms as $room => $contacts) {
-                    $roomTd = '<td rowspan="' . $roomCount[$room] . '" width="100"> '. $room .' </td>';
+                    $roomUnitId = "{$unit}-{$room}";
+                    $roomTd = '<td rowspan="' . $roomCount[$roomUnitId] . '" width="100"> '. $room .' </td>';
                     foreach ($contacts as $contact) {
                         switch($contact['status']) {
                             case null:
@@ -140,7 +143,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                                 break;
                         }
 
-                        $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact['id'] . '" data-bs-target="#editContactModal">Szerkeszt</button>';
+                        $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact['id'] . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
                         if (!empty($actionLink) && is_null($contact['deleted'])) {
                             $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
                         }
