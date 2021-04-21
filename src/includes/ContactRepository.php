@@ -4,19 +4,16 @@
 class ContactRepository
 {
     const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, deleted';
+    const DATE_PREFIX = "2021-06-";
+
     /**
      * @var mysqli
      */
     private $mysqli;
-    /**
-     * @var string
-     */
-    private $datePrefix;
 
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
-        $this->datePrefix = "2021-06-";
     }
 
     public function getByHash(string $hash)
@@ -212,8 +209,8 @@ class ContactRepository
         $dob = $contact->getDob();
         $nationality = $contact->getNationality();
         $idNumber = $contact->getIdNumber();
-        $arrivalDate = $this->datePrefix . $contact->getArrivalDate();
-        $departureDate = $this->datePrefix . $contact->getDepartureDate();
+        $arrivalDate = self::DATE_PREFIX. $contact->getArrivalDate();
+        $departureDate = self::DATE_PREFIX . $contact->getDepartureDate();
         $exemption = $contact->getExemption();
         $exemptionProofType = $contact->getExemptionProofType();
         $exemptionProofNum = $contact->getExemptionProofNum();
