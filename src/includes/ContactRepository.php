@@ -3,7 +3,7 @@
 
 class ContactRepository
 {
-    const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, status, deleted';
+    const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, deleted';
     /**
      * @var mysqli
      */
@@ -75,7 +75,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                " . self::FIELDS . "
+                " . self::FIELDS . ", status
             FROM 
                 ifa
             LEFT JOIN 
@@ -96,7 +96,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                " . self::FIELDS . "
+                " . self::FIELDS . ", status
             FROM 
                 ifa
             LEFT JOIN 
