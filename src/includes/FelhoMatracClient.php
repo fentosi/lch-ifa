@@ -220,7 +220,7 @@ class FelhoMatracClient
             case 'Kiskoru':
                 $ntakException = 'im1';
                 break;
-            case 'Soltvadkerti':
+            case 'Helyi':
                 $ntakException = 'im10';
                 break;
         }

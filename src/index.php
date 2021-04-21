@@ -180,7 +180,7 @@
                         <option value="Kiskoru" <?= ($contact->getExemption() == 'Kiskoru' ? 'selected' : '') ?>>18.
                             életévét be nem töltött magánszemély
                         </option>
-                        <option value="Soltvadkerti" <?= ($contact->getExemption() == 'Soltvadkerti' ? 'selected' : '') ?>>
+                        <option value="Helyi" <?= ($contact->getExemption() == 'Helyi' ? 'selected' : '') ?>>
                             A településen lakóhellyel, tartózkodási hellyel rendelkező vendég
                         </option>
                         <option value="70ev" <?= ($contact->getExemption() == '70ev' ? 'selected' : '') ?>>70. életévet

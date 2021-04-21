@@ -40,7 +40,7 @@ class IFAMaker
             case 'Kiskoru':
                 imagettftext($this->image, 30, 0, 287, 2600, $black, self::FONT, 'X');
                 break;
-            case 'Soltvadkerti':
+            case 'Helyi':
                 imagettftext($this->image, 30, 0, 287, 2658, $black, self::FONT, 'X');
                 break;
             case '70ev':
