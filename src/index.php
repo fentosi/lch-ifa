@@ -135,35 +135,45 @@
                 </div>
             </div>
             <div class="row">
-                <div class="six columns">
+                <div class="three columns">
+                  <label>Lakóegység</label>
+                  <input type="text" class="u-full-width" id="unit" name="unit"
+                         value="<?= getEscapedValue('unit', $contact)?>">
+                  <div class="error">A mező kitöltése kötelező</div>
+                </div>
+                <div class="three columns">
+                  <label>Szoba</label>
+                  <input type="text" class="u-full-width" id="room" name="room"
+                         value="<?= getEscapedValue('room', $contact) ?>">
+                  <div class="error">A mező kitöltése kötelező</div>
+                </div>
+                <div class="three columns">
                     <label>Érkezés napja</label>
-                    2021. június
-                    <select id="arrival_date" name="arrival_date">
+                    <select id="arrival_date" name="arrival_date" class="u-full-width">
                         <option value=""></option>
-                        <option value="17" <?= (getEscapedValue('arrivalDate', $contact) == 17 ? 'selected' : '') ?>>17.
+                        <option value="17" <?= (getEscapedValue('arrivalDate', $contact) == 17 ? 'selected' : '') ?>>2021. június 17.
                             csütörtök
                         </option>
-                        <option value="18" <?= (getEscapedValue('arrivalDate', $contact) == 18 ? 'selected' : '') ?>>18.
+                        <option value="18" <?= (getEscapedValue('arrivalDate', $contact) == 18 ? 'selected' : '') ?>>2021. június 18.
                             péntek
                         </option>
-                        <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == 19 ? 'selected' : '') ?>>19.
+                        <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == 19 ? 'selected' : '') ?>>2021. június 19.
                             szombat
                         </option>
                     </select>
                     <div class="error">A mező kitöltése kötelező</div>
                 </div>
-                <div class="six columns">
+                <div class="three columns">
                     <label>Távozás napja</label>
-                    2021. június
-                    <select id="departure_date" name="departure_date">
+                    <select id="departure_date" name="departure_date" class="u-full-width">
                         <option value=""></option>
-                        <option value="18" <?= (getEscapedValue('departureDate', $contact) == 18 ? 'selected' : '') ?>>18.
+                        <option value="18" <?= (getEscapedValue('departureDate', $contact) == 18 ? 'selected' : '') ?>>2021. június 18.
                           péntek
                         </option>
-                        <option value="19" <?= (getEscapedValue('departureDate', $contact) == 19 ? 'selected' : '') ?>>19.
+                        <option value="19" <?= (getEscapedValue('departureDate', $contact) == 19 ? 'selected' : '') ?>>2021. június 19.
                           szombat
                         </option>
-                        <option value="20" <?= (getEscapedValue('departureDate', $contact) == 20 ? 'selected' : '') ?>>20.
+                        <option value="20" <?= (getEscapedValue('departureDate', $contact) == 20 ? 'selected' : '') ?>>2021. június 20.
                           vasárnap
                         </option>
                     </select>

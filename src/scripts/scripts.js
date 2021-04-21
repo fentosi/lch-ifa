@@ -31,6 +31,8 @@
             'dob',
             'nationality',
             'id_number',
+            'unit',
+            'room',
             'arrival_date',
             'departure_date'
         ];
