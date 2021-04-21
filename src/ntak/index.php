@@ -140,7 +140,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                                 break;
                         }
 
-                        $buttons = '';
+                        $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact['id'] . '" data-bs-target="#editContactModal">Szerkeszt</button>';
                         if (!empty($actionLink) && is_null($contact['deleted'])) {
                             $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
                         }
@@ -180,5 +180,29 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 </tbody>
             </table>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="editContactModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Szerkesztes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <iframe id="iframeModal" width="100%" height="400"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
     </body>
+    <script src="../scripts/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script>
+        $('.modal').on('show.bs.modal', (event) => {
+          const button = event.relatedTarget;
+          const contactId = button.getAttribute('data-bs-id');
+          $('#iframeModal').attr('src',`edit.php?contactId=${contactId}`);
+        })
+    </script>
 </html>
