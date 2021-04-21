@@ -28,7 +28,7 @@
                     <br /><br />
                     A kitöltött bejelentőlapot <a href="ifa.php?hash=<?=$_GET['hash']?>">INNEN</a> tudod letölteni!
                     <br /><br />
-                    Várunk 2020. augusztus 19-23 között Soltvadkerten a BMW találkozón!
+                    Várunk 2021. június 17-21 között a BMW találkozón!
                     <br /><br />
                     Az RCS csapata
                 </p>
