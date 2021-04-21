@@ -195,12 +195,27 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "INSERT INTO 
                     ifa
-                        (last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
+                        (id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
                     VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )"))) {
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )
+                    ON DUPLICATE KEY UPDATE
+                    last_name = ?,
+                    first_name = ?,
+                    zip = ?,
+                    city = ?,
+                    reg_num = ?,
+                    dob = ?,
+                    nationality = ?,
+                    id_number = ?,
+                    unit = ?,
+                    room = ?,
+                    arrival_date = ?,
+                    departure_date = ?
+                    "))) {
             throw new Exception("SQL Statement error");
         }
 
+        $id = $contact->getId();
         $last_name = $contact->getLastName();
         $first_name = $contact->getFirstName();
         $zip = $contact->getZip();
@@ -219,7 +234,8 @@ class ContactRepository
         $unit = $contact->getUnit();
         $room = $contact->getRoom();
 
-        $statement->bind_param('sssssssssssssssss', $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $unit, $room, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash);
+        $statement->bind_param('dsssssssssssssssssssssssssssss', $id, $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $unit, $room, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash,
+            $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $unit, $room, $arrivalDate, $departureDate);
 
         if (!$statement->execute()) {
 
