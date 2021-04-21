@@ -203,6 +203,10 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
           const button = event.relatedTarget;
           const contactId = button.getAttribute('data-bs-id');
           $('#iframeModal').attr('src',`edit.php?contactId=${contactId}`);
-        })
+        });
+
+        $('.modal').on('hidden.bs.modal', () => {
+          document.location.reload()
+        });
     </script>
 </html>
