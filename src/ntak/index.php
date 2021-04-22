@@ -70,20 +70,12 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
 $contacts = $contactRepository->getAllWithReservationData();
 $groupedContacts = $unitCount = $roomCount = [];
 foreach ($contacts as $contact) {
-    if (isset($unitCount[$contact['unit']])) {
-        $unitCount[$contact['unit']]++;
+    if (isset($roomCount[$contact['room']])) {
+        $roomCount[$contact['room']]++;
     } else {
-        $unitCount[$contact['unit']] = 1;
+        $roomCount[$contact['room']] = 1;
     }
-
-    $roomUnitId = "{$contact['unit']}-{$contact['room']}";
-    if (isset($roomCount[$roomUnitId])) {
-        $roomCount[$roomUnitId]++;
-    } else {
-        $roomCount[$roomUnitId] = 1;
-    }
-
-    $groupedContacts[$contact['unit']][$contact['room']][] = $contact;
+    $groupedContacts[$contact['room']][] = $contact;
 }
 $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 ?>
@@ -108,7 +100,6 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Lakoegyseg</th>
                     <th>Szoba</th>
                     <th>Rendszam</th>
                     <th>Vendeg</th>
@@ -122,11 +113,8 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 <tbody>
                 <?php
 
-                foreach ($groupedContacts as $unit => $rooms) {
-                  $unitTd = '<td rowspan="' . $unitCount[$unit] . '" width="100"> '. $unit .' </td>';
-                  foreach ($rooms as $room => $contacts) {
-                    $roomUnitId = "{$unit}-{$room}";
-                    $roomTd = '<td rowspan="' . $roomCount[$roomUnitId] . '" width="100"> '. $room .' </td>';
+                foreach ($groupedContacts as $room => $contacts) {
+                    $roomTd = '<td rowspan="' . $roomCount[$room] . '" width="100"> '. $room .' </td>';
                     foreach ($contacts as $contact) {
                         switch($contact['status']) {
                             case null:
@@ -156,11 +144,6 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         echo '
                     <tr ' . (!is_null($contact['deleted']) ? 'class="table-secondary"' : '') . '>
                     ';
-                        if (!empty($unitTd)) {
-                          echo $unitTd;
-                          $unitTd = '';
-                        }
-
                         if (!empty($roomTd)) {
                             echo $roomTd;
                             $roomTd = '';
@@ -176,7 +159,6 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         <td width="200"> ' . $buttons . '</td>
                      </tr>';
                     }
-                  }
                 }
                 echo '</table>';
                 ?>
