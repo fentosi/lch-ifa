@@ -56,6 +56,22 @@ class ContactRepository
         return $result->fetch_assoc();
     }
 
+    public function getAll()
+    {
+        $query = "
+            SELECT
+                " . self::FIELDS . "
+            FROM 
+                ifa
+            ORDER BY last_name";
+
+        if ($result = $this->mysqli->query($query)) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            throw new Exception("Execute failed");
+        }
+    }
+
     public function getAllWithReservationDataByStatus(int $status)
     {
         if (!($statement = $this->mysqli->prepare(
