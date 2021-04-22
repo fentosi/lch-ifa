@@ -135,19 +135,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="three columns">
-                  <label>Lakóegység</label>
-                  <input type="text" class="u-full-width" id="unit" name="unit"
-                         value="<?= getEscapedValue('unit', $contact)?>">
-                  <div class="error">A mező kitöltése kötelező</div>
-                </div>
-                <div class="three columns">
+                <div class="four columns">
                   <label>Szoba</label>
                   <input type="text" class="u-full-width" id="room" name="room"
                          value="<?= getEscapedValue('room', $contact) ?>">
                   <div class="error">A mező kitöltése kötelező</div>
                 </div>
-                <div class="three columns">
+                <div class="four columns">
                     <label>Érkezés napja</label>
                     <select id="arrival_date" name="arrival_date" class="u-full-width">
                         <option value=""></option>
@@ -163,7 +157,7 @@
                     </select>
                     <div class="error">A mező kitöltése kötelező</div>
                 </div>
-                <div class="three columns">
+                <div class="four columns">
                     <label>Távozás napja</label>
                     <select id="departure_date" name="departure_date" class="u-full-width">
                         <option value=""></option>
