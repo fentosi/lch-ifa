@@ -68,13 +68,8 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
 }
 
 $contacts = $contactRepository->getAllWithReservationData();
-$groupedContacts = $roomCount = [];
+$groupedContacts = [];
 foreach ($contacts as $contact) {
-    if (isset($roomCount[$contact['room']])) {
-        $roomCount[$contact['room']]++;
-    } else {
-        $roomCount[$contact['room']] = 1;
-    }
     $groupedContacts[$contact['room']][] = $contact;
 }
 $statusText = array_flip(ReservationStatuses::STATUS_CODES);
@@ -114,7 +109,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 <?php
 
                 foreach ($groupedContacts as $room => $contacts) {
-                    $roomTd = '<td rowspan="' . $roomCount[$room] . '" width="100"> '. $room .' </td>';
+                    $roomTd = '<td rowspan="' . count($contacts) . '" width="100"> '. $room .' </td>';
                     foreach ($contacts as $contact) {
                         switch($contact['status']) {
                             case null:
