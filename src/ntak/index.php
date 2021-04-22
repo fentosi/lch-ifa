@@ -67,7 +67,14 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
     }
 }
 
-$contacts = $contactRepository->getAllWithReservationData();
+$reservationArray = $reservationRepository->getAll();
+$reservations = [];
+foreach($reservationArray as $res) {
+    $reservation =  Reservation::createFrom($mysqli, $res);
+    $reservations[$reservation->getReservationHash()] = $reservation;
+}
+
+$contacts = $contactRepository->getAll();
 $groupedContacts = [];
 foreach ($contacts as $contact) {
     $groupedContacts[$contact['room']][] = $contact;
@@ -110,22 +117,28 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 
                 foreach ($groupedContacts as $room => $contacts) {
                     $roomTd = '<td rowspan="' . count($contacts) . '" width="100"> '. $room .' </td>';
-                    foreach ($contacts as $contact) {
-                        switch($contact['status']) {
+                    $reservationId = $contacts[0]['reservation_id'];
+
+                    if (is_null($reservationId)) {
+                        $actionLink = './index.php?action=claim&contactId=' . $contacts[0]['id'];
+                        $actionText = 'Igenyles';
+                    } else {
+                        $reservation = $reservations[$reservationId];
+                        switch($reservation['status']) {
                             case null:
-                                $actionLink = './index.php?action=claim&contactId=' . $contact['id'];
-                                $actionText = 'Igenyles';
                                 break;
                             case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
-                                $actionLink = './index.php?action=arrival&contactId=' . $contact['id'];
+                                $actionLink = './index.php?action=arrival&contactId=' . $contacts[0]['id'];
                                 $actionText = 'Erkezes';
                                 break;
                             case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
-                                $actionLink = './index.php?action=departure&contactId=' . $contact['id'];
+                                $actionLink = './index.php?action=departure&contactId=' . $contacts[0]['id'];
                                 $actionText = 'Tavozas';
                                 break;
                         }
+                    }
 
+                    foreach ($contacts as $contact) {
                         $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact['id'] . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
                         if (!empty($actionLink) && is_null($contact['deleted'])) {
                             $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
