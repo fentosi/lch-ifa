@@ -21,6 +21,7 @@ class Contact
     private $reservationId;
     private $id;
     private $room;
+    private $deleted;
 
     public function __construct(
         string $last_name,
@@ -38,7 +39,8 @@ class Contact
         string $exemptionProofType,
         string $exemptionProofNum,
         int $reservationId = null,
-        int $id = null
+        int $id = null,
+        string $deleted = null
         )
     {
         $this->last_name = $last_name;
@@ -59,6 +61,7 @@ class Contact
         $this->id = $id;
         $this->reservationId = $reservationId;
         $this->room = $room;
+        $this->deleted = $deleted;
     }
 
     public function getId(): int
@@ -147,9 +150,14 @@ class Contact
         return $this->hash;
     }
 
-    public function getReservationId(): int
+    public function getReservationId()
     {
         return $this->reservationId;
+    }
+
+    public function isDeleted(): bool
+    {
+        return !is_null($this->deleted);
     }
 
     public function get($key) {
@@ -174,7 +182,8 @@ class Contact
             $data['exemption_proof_type'] ?? '',
             $data['exemption_proof_num'] ?? '',
             $data['reservation_id'] ?? null,
-            $data['id'] ?? null
+            $data['id'] ?? null,
+            $data['deleted'] ?? null
         );
     }
 }
