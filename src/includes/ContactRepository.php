@@ -3,7 +3,7 @@
 
 class ContactRepository
 {
-    const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, deleted';
+    const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, deleted';
     const DATE_PREFIX = "2021-06-";
 
     /**
@@ -195,9 +195,9 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "INSERT INTO 
                     ifa
-                        (id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, unit, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
+                        (id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
                     VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )
                     ON DUPLICATE KEY UPDATE
                     last_name = ?,
                     first_name = ?,
@@ -207,7 +207,6 @@ class ContactRepository
                     dob = ?,
                     nationality = ?,
                     id_number = ?,
-                    unit = ?,
                     room = ?,
                     arrival_date = ?,
                     departure_date = ?
@@ -231,11 +230,10 @@ class ContactRepository
         $exemptionProofNum = $contact->getExemptionProofNum();
         $consent = $contact->getConsent();
         $hash = $contact->getHash();
-        $unit = $contact->getUnit();
         $room = $contact->getRoom();
 
-        $statement->bind_param('dsssssssssssssssssssssssssssss', $id, $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $unit, $room, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash,
-            $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $unit, $room, $arrivalDate, $departureDate);
+        $statement->bind_param('dssssssssssssssssssssssssssss', $id, $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash,
+            $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room, $arrivalDate, $departureDate);
 
         if (!$statement->execute()) {
 
