@@ -153,10 +153,8 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         echo '
                     <tr ' . ($contact->isDeleted() ? 'class="table-secondary"' : '') . '>
                     ';
-                        if (!empty($roomTd)) {
-                            echo $roomTd;
-                            $roomTd = '';
-                        }
+
+                        echo $roomTd;
 
                         echo '
                         <td width="100">' . $contact->getRegNum() . '</td>
@@ -165,8 +163,13 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         <td width="120">' . $contact->getArrivalDate() . '</td>
                         <td width="120">' . $contact->getDepartureDate() . '</td>
                         <td width="50">' . (isset($reservation) && !empty($reservation->getStatus()) ? $statusText[$reservation->getStatus()] : '' ) . '</td>
-                        <td width="200"> ' . $buttons . '</td>
+                        <td width="200"> ' . (!empty($roomTd) ? $buttons : ''). '</td>
                      </tr>';
+
+                        if (!empty($roomTd)) {
+                            $roomTd = '';
+                        }
+
                     }
                 }
                 echo '</table>';
