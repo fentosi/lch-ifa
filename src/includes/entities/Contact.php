@@ -20,7 +20,6 @@ class Contact
     private $hash;
     private $reservationId;
     private $id;
-    private $unit;
     private $room;
 
     public function __construct(
@@ -32,7 +31,6 @@ class Contact
         string $dob,
         string $nationality,
         string $idNumber,
-        string $unit,
         string $room,
         string $arrivalDate,
         string $departureDate,
@@ -60,7 +58,6 @@ class Contact
         $this->hash = spl_object_hash($this);
         $this->id = $id;
         $this->reservationId = $reservationId;
-        $this->unit = $unit;
         $this->room = $room;
     }
 
@@ -113,11 +110,6 @@ class Contact
     public function getRoom(): string
     {
         return $this->room;
-    }
-
-    public function getUnit(): string
-    {
-        return $this->unit;
     }
 
     public function getArrivalDate(): string
@@ -175,7 +167,6 @@ class Contact
             $data['dob'] ?? '',
             $data['nationality'] ?? '',
             $data['id_number'] ?? '',
-            $data['unit'] ?? '',
             $data['room'] ?? '',
             $data['arrival_date'] ?? '',
             $data['departure_date'] ?? '',
