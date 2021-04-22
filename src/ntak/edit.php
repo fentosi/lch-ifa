@@ -122,11 +122,6 @@ function getEscapedValue(string $key, Contact $contact) {
               </div>
               <div class="row gx-5 gy-5">
                 <div class="col">
-                  <label class="form-label" >Lakóegység</label>
-                  <input type="text" class="form-control" id="unit" name="unit"
-                         value="<?= getEscapedValue('unit', $contact)?>">
-                </div>
-                <div class="col">
                   <label class="form-label" >Szoba</label>
                   <input type="text" class="form-control" id="room" name="room"
                          value="<?= getEscapedValue('room', $contact) ?>">
