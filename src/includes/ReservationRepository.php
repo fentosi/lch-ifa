@@ -38,4 +38,16 @@ class ReservationRepository
 
         return $result->fetch_assoc();
     }
+
+    public function getAll()
+    {
+        $result = $this->mysqli->query("
+            SELECT
+                id, reservation_hash, debit_hash, room_hash, status
+            FROM 
+                ifa_reservation
+        ");
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
