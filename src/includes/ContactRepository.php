@@ -31,13 +31,7 @@ class ContactRepository
 
         $statement->bind_param('s', $hash);
 
-        if (!$statement->execute()) {
-            throw new Exception("Execute failed");
-        }
-
-        if (!($result = $statement->get_result())) {
-            throw new Exception("Getting result set failed");
-        }
+        $result = $this->executeStatement($statement);
 
         return $result->fetch_assoc();
     }
@@ -57,35 +51,9 @@ class ContactRepository
 
         $statement->bind_param('d', $id);
 
-        if (!$statement->execute()) {
-            throw new Exception("Execute failed");
-        }
-
-        if (!($result = $statement->get_result())) {
-            throw new Exception("Getting result set failed");
-        }
+        $result = $this->executeStatement($statement);
 
         return $result->fetch_assoc();
-    }
-
-    public function getAllWithReservationData()
-    {
-        $query = "
-            SELECT
-                " . self::FIELDS . ", status
-            FROM 
-                ifa
-            LEFT JOIN 
-                ifa_reservation
-            ON
-                ifa_reservation.id = ifa.reservation_id
-            ORDER BY last_name";
-
-        if ($result = $this->mysqli->query($query)) {
-            return $result->fetch_all(MYSQLI_ASSOC);
-        } else {
-            throw new Exception("Execute failed");
-        }
     }
 
     public function getAllWithReservationDataByStatus(int $status)
@@ -109,13 +77,7 @@ class ContactRepository
 
         $statement->bind_param('d', $status);
 
-        if (!$statement->execute()) {
-            throw new Exception("Execute failed");
-        }
-
-        if (!($result = $statement->get_result())) {
-            throw new Exception("Getting result set failed");
-        }
+        $result = $this->executeStatement($statement);
 
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -242,5 +204,18 @@ class ContactRepository
         }
 
         $statement->close();
+    }
+
+    private function executeStatement(mysqli_stmt $statement): mysqli_result
+    {
+        if (!$statement->execute()) {
+            throw new Exception("Execute failed");
+        }
+
+        if (!($result = $statement->get_result())) {
+            throw new Exception("Getting result set failed");
+        }
+
+        return $result;
     }
 }
