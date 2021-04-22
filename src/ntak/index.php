@@ -79,7 +79,10 @@ if (isset($_GET['action'])) {
 
                 break;
             case 'delete':
-                $contactRepository->deleteContact($contact->getId());
+                if (!empty($_GET['contactId'])) {
+                    $contactRepository->deleteContact($_GET['contactId']);
+                }
+
                 break;
         }
     } catch (Exception $e) {
@@ -166,25 +169,24 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                             $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
                         }
 
+                        $deleteButton = '';
                         if (!$contact->isDeleted()) {
                             $deleteLink = './index.php?action=delete&contactId=' . $contact->getId();
-                            $buttons .= '&nbsp;<a href="' . $deleteLink .'" class="btn btn-danger" role="button">Torles</a>';
+                            $deleteButton = '<a href="' . $deleteLink .'" class="btn btn-danger" role="button" style="float: right;">Torles</a>';
                         }
 
                         echo '
                     <tr ' . ($contact->isDeleted() ? 'class="table-secondary"' : '') . '>
                     ';
 
-                        echo $roomTd;
-
-                        echo '
+                        echo $roomTd . '
                         <td width="100">' . $contact->getRegNum() . '</td>
                         <td width="200">' . $contact->getLastName() . ' ' . $contact->getFirstName() . '</td>
                         <td width="50" >' . $contact->getZip() . '</td>
                         <td width="120">' . $contact->getArrivalDate() . '</td>
                         <td width="120">' . $contact->getDepartureDate() . '</td>
                         <td width="50">' . (isset($reservation) && !empty($reservation->getStatus()) ? $statusText[$reservation->getStatus()] : '' ) . '</td>
-                        <td width="200"> ' . (!empty($roomTd) ? $buttons : ''). '</td>
+                        <td width="200"> ' . (!empty($roomTd) ? $buttons . '&nbsp;' : '') . $deleteButton . '</td>
                      </tr>';
 
                         if (!empty($roomTd)) {
