@@ -1,4 +1,6 @@
 <?php
+    use \Firebase\JWT\JWT;
+    
     ini_set('display_errors', 'off');
     require_once('vendor/autoload.php');
 
@@ -35,6 +37,21 @@
     function getEscapedValue(string $key, Contact $contact) {
         $value = $contact->get($key);
         return empty($value) ? '' : htmlspecialchars($value);
+    }
+
+    if ($_GET['reservation']) {
+      try {
+          $reservationData = JWT::decode($_GET['reservation'], $_ENV['JWT_SECRET'], array('HS256'));
+          if (!empty($reservationData->room)) {
+              $contact = Contact::createFrom(['room' => $reservationData->room]);
+          } else {
+              $error[] = 'Nincs megadva szoba a foglalashoz';
+          }
+      } catch (Exception $e) {
+          $error[] = 'Nem megfelelo a foglalasi informacio';
+      }
+    } else {
+        $error[] = 'Nincs megadva foglalasi informacio';
     }
 ?>
 <!DOCTYPE html>
@@ -137,7 +154,7 @@
             <div class="row">
                 <div class="four columns">
                   <label>Szoba</label>
-                  <input type="text" class="u-full-width" id="room" name="room"
+                  <input type="text" class="u-full-width" id="room" name="room" disabled
                          value="<?= getEscapedValue('room', $contact) ?>">
                   <div class="error">A mező kitöltése kötelező</div>
                 </div>
