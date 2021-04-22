@@ -68,7 +68,7 @@ if (isset($_GET['action']) && isset($_GET['contactId'])) {
 }
 
 $contacts = $contactRepository->getAllWithReservationData();
-$groupedContacts = $unitCount = $roomCount = [];
+$groupedContacts = $roomCount = [];
 foreach ($contacts as $contact) {
     if (isset($roomCount[$contact['room']])) {
         $roomCount[$contact['room']]++;
