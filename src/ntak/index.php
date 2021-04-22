@@ -29,33 +29,53 @@ function validateDate(string $date, string $type) {
     }
 }
 
-if (isset($_GET['action']) && isset($_GET['contactId'])) {
+if (isset($_GET['action'])) {
     try {
-        $contact = $contactRepository->getById(intval($_GET['contactId']));
-        $contact = Contact::createFrom($contact);
-
         switch($_GET['action']) {
             case 'claim':
-                $reservation = new Reservation($mysqli);
-                $reservation->save();
-                $reservation = $felhoMatracClient->makeReservation($reservation, [$contact]);
+                if (!empty($_GET['room'])) {
+                    $contactsArray = $contactRepository->getByRoom($_GET['room']);
+                    $contacts = array_map('Contact::createFrom', $contactsArray);
 
-                //update contact
-                $contactRepository->updateContactReservation($contact->getId(), $reservation->getId());
+                    $reservation = new Reservation($mysqli);
+                    $reservation->save();
+                    $reservation = $felhoMatracClient->makeReservation($reservation, $contacts);
+
+                    //update contact
+                    foreach ($contacts as $contact) {
+                        $contactRepository->updateContactReservation($contact->getId(), $reservation->getId());
+                    }
+
+                    header("Location: /ntak/index.php");
+                }
 
                 break;
             case 'arrival':
-                validateDate($contact->getArrivalDate(), 'Erkezes');
+                if (!empty($_GET['reservationId'])) {
+                    $contactsArray = $contactRepository->getByReservationId($_GET['reservationId']);
+                    $contacts = array_map('Contact::createFrom', $contactsArray);
 
-                $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($contact->getReservationId()));
-                $reservation = $felhoMatracClient->setArrivalForReservation($reservation, [$contact]);
+                    validateDate(FelhoMatracClient::getMinArrivalDate($contacts), 'Erkezes');
+
+                    $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($_GET['reservationId']));
+                    $reservation = $felhoMatracClient->setArrivalForReservation($reservation, $contacts);
+
+                    header("Location: /ntak/index.php");
+                }
 
                 break;
             case 'departure':
-                validateDate($contact->getDepartureDate(), 'Tavozas');
+                if (!empty($_GET['reservationId'])) {
+                    $contactsArray = $contactRepository->getByReservationId($_GET['reservationId']);
+                    $contacts = array_map('Contact::createFrom', $contactsArray);
 
-                $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($contact->getReservationId()));
-                $reservation = $felhoMatracClient->setDepartureForReservation($reservation, [$contact]);
+                    validateDate(FelhoMatracClient::getMaxDepartureDate($contacts), 'Tavozas');
+
+                    $reservation = Reservation::createFrom($mysqli, $reservationRepository->getById($_GET['reservationId']));
+                    $reservation = $felhoMatracClient->setDepartureForReservation($reservation, $contacts);
+
+                    header("Location: /ntak/index.php");
+                }
 
                 break;
             case 'delete':
@@ -71,7 +91,7 @@ $reservationArray = $reservationRepository->getAll();
 $reservations = [];
 foreach($reservationArray as $res) {
     $reservation =  Reservation::createFrom($mysqli, $res);
-    $reservations[$reservation->getReservationHash()] = $reservation;
+    $reservations[$reservation->getId()] = $reservation;
 }
 
 $contacts = $contactRepository->getAll();
@@ -119,9 +139,10 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 foreach ($groupedContacts as $room => $contacts) {
                     $roomTd = '<td rowspan="' . count($contacts) . '" width="100"> '. $room .' </td>';
                     $reservationId = $contacts[0]->getReservationId();
+                    $reservation = null;
 
                     if (is_null($reservationId)) {
-                        $actionLink = './index.php?action=claim&contactId=' . $contacts[0]->getId();
+                        $actionLink = './index.php?action=claim&room=' . urlencode($room);
                         $actionText = 'Igenyles';
                     } else {
                         $reservation = $reservations[$reservationId];
@@ -129,11 +150,11 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                             case null:
                                 break;
                             case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
-                                $actionLink = './index.php?action=arrival&contactId=' . $contacts[0]->getId();
+                                $actionLink = './index.php?action=arrival&reservationId=' . $reservation->getId();
                                 $actionText = 'Erkezes';
                                 break;
                             case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
-                                $actionLink = './index.php?action=departure&contactId=' . $contacts[0]->getId();
+                                $actionLink = './index.php?action=departure&reservationId=' . $reservation->getId();
                                 $actionText = 'Tavozas';
                                 break;
                         }
