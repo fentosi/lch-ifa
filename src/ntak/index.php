@@ -77,7 +77,7 @@ foreach($reservationArray as $res) {
 $contacts = $contactRepository->getAll();
 $groupedContacts = [];
 foreach ($contacts as $contact) {
-    $groupedContacts[$contact['room']][] = $contact;
+    $groupedContacts[$contact['room']][] = Contact::createFrom($contact);
 }
 $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 ?>
@@ -115,42 +115,43 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                 <tbody>
                 <?php
 
+                /** @var Contact[] $contacts */
                 foreach ($groupedContacts as $room => $contacts) {
                     $roomTd = '<td rowspan="' . count($contacts) . '" width="100"> '. $room .' </td>';
-                    $reservationId = $contacts[0]['reservation_id'];
+                    $reservationId = $contacts[0]->getReservationId();
 
                     if (is_null($reservationId)) {
-                        $actionLink = './index.php?action=claim&contactId=' . $contacts[0]['id'];
+                        $actionLink = './index.php?action=claim&contactId=' . $contacts[0]->getId();
                         $actionText = 'Igenyles';
                     } else {
                         $reservation = $reservations[$reservationId];
-                        switch($reservation['status']) {
+                        switch($reservation->getStatus()) {
                             case null:
                                 break;
                             case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
-                                $actionLink = './index.php?action=arrival&contactId=' . $contacts[0]['id'];
+                                $actionLink = './index.php?action=arrival&contactId=' . $contacts[0]->getId();
                                 $actionText = 'Erkezes';
                                 break;
                             case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
-                                $actionLink = './index.php?action=departure&contactId=' . $contacts[0]['id'];
+                                $actionLink = './index.php?action=departure&contactId=' . $contacts[0]->getId();
                                 $actionText = 'Tavozas';
                                 break;
                         }
                     }
 
                     foreach ($contacts as $contact) {
-                        $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact['id'] . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
-                        if (!empty($actionLink) && is_null($contact['deleted'])) {
+                        $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact->getId() . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
+                        if (!empty($actionLink) && !$contact->isDeleted()) {
                             $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
                         }
 
-                        if (is_null($contact['deleted'])) {
-                            $deleteLink = './index.php?action=delete&contactId=' . $contact['id'];
+                        if (!$contact->isDeleted()) {
+                            $deleteLink = './index.php?action=delete&contactId=' . $contact->getId();
                             $buttons .= '&nbsp;<a href="' . $deleteLink .'" class="btn btn-danger" role="button">Torles</a>';
                         }
 
                         echo '
-                    <tr ' . (!is_null($contact['deleted']) ? 'class="table-secondary"' : '') . '>
+                    <tr ' . ($contact->isDeleted() ? 'class="table-secondary"' : '') . '>
                     ';
                         if (!empty($roomTd)) {
                             echo $roomTd;
@@ -158,12 +159,12 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         }
 
                         echo '
-                        <td width="100">' . $contact['reg_num'] . '</td>
-                        <td width="200">' . $contact['last_name'] . ' ' . $contact['first_name'] . '</td>
-                        <td width="50" >' . $contact['zip'] . '</td>
-                        <td width="120">' . $contact['arrival_date'] . '</td>
-                        <td width="120">' . $contact['departure_date'] . '</td>
-                        <td width="50">' . (isset($contact['status']) ? $statusText[$contact['status']] : '' ) . '</td>
+                        <td width="100">' . $contact->getRegNum() . '</td>
+                        <td width="200">' . $contact->getLastName() . ' ' . $contact->getFirstName() . '</td>
+                        <td width="50" >' . $contact->getZip() . '</td>
+                        <td width="120">' . $contact->getArrivalDate() . '</td>
+                        <td width="120">' . $contact->getDepartureDate() . '</td>
+                        <td width="50">' . (isset($reservation) && !empty($reservation->getStatus()) ? $statusText[$reservation->getStatus()] : '' ) . '</td>
                         <td width="200"> ' . $buttons . '</td>
                      </tr>';
                     }
