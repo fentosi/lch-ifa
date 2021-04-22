@@ -27,6 +27,12 @@ class FelhoMatracClient
         return $reservation;
     }
 
+    /**
+     * @param Reservation $reservation
+     * @param Contact[] $contacts
+     * @return Reservation
+     * @throws Exception
+     */
     public function makeReservation(Reservation $reservation, array $contacts): Reservation {
         if ($reservation->getStatus() !== "") {
             throw new Exception('Wrong status for make a reservation!');
@@ -36,15 +42,13 @@ class FelhoMatracClient
 
         $reservation->setReservationHash(Uuid::uuid4()->toString());
 
-        $reservation = $this->makeRooom($reservation);
+        $reservation->setRoomHash($contacts[0]->getRoom());
 
         $response = $this->sendPostRequest(
             '/reservation',
             $this->getReservationBody($contacts, $reservation));
 
         $this->isResponseOK($response);
-
-        //$reservation = $this->addDebitToReservation($contacts, $reservation);
 
         $reservation->save();
 
@@ -96,6 +100,11 @@ class FelhoMatracClient
     }
 
 
+    /**
+     * @param Contact[]
+     * @param Reservation $reservation
+     * @return array
+     */
     private function getReservationBody(array $contacts, Reservation $reservation): array {
         return [
             'resNr' => 'FOGL' . $reservation->getId(),
@@ -110,6 +119,28 @@ class FelhoMatracClient
             'roomId' => $reservation->getRoomHash(),
             'guests' => $this->getReservationGuests($contacts)
         ];
+    }
+
+    /**
+     * @param Contact[]
+     * @return string
+     */
+    public static function getMinArrivalDate(array $contacts): string
+    {
+        return min(array_map(function($contact) {
+            return $contact->getArrivalDate();
+        }, $contacts));
+    }
+
+    /**
+     * @param Contact[]
+     * @return string
+     */
+    public static function getMaxDepartureDate(array $contacts): string
+    {
+        return max(array_map(function($contact) {
+            return $contact->getDepartureDate();
+        }, $contacts));
     }
 
     private function getReservationGuests(array $contacts): array {
