@@ -57,6 +57,34 @@ class ContactRepository
     }
 
     /**
+     * @param string $room
+     * @return Contact[]
+     * @throws Exception
+     */
+    public function getByRoom(string $room): array
+    {
+        if (!($statement = $this->mysqli->prepare(
+            "
+            SELECT
+                " . self::FIELDS . "
+            FROM 
+                ifa
+            WHERE 
+                room = ?
+            AND
+                reservation_id IS NULL
+                "))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('s', $room);
+
+        $result = $this->executeStatement($statement);
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
      * @param int $reservationId
      * @return Contact[]
      * @throws Exception
