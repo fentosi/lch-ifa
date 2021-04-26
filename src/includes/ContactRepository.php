@@ -266,7 +266,8 @@ class ContactRepository
         $hash = $contact->getHash();
         $room = $contact->getRoom();
 
-        $statement->bind_param('dssssssssssssssssssssssssssss', $id, $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash,
+        $statement->bind_param('dsssssssssssssssssssssssssss', $id, $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room,
+            $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash,
             $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room, $arrivalDate, $departureDate);
 
         if (!$statement->execute()) {
