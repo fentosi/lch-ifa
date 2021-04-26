@@ -164,9 +164,11 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                     }
 
                     foreach ($contacts as $contact) {
-                        $buttons = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact->getId() . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
+                        $editButton = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact->getId() . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
+
+                        $actionButton = '';
                         if (!empty($actionLink) && !$contact->isDeleted()) {
-                            $buttons .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
+                            $actionButton .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
                         }
 
                         $deleteButton = '';
@@ -186,7 +188,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         <td width="120">' . $contact->getArrivalDate() . '</td>
                         <td width="120">' . $contact->getDepartureDate() . '</td>
                         <td width="50">' . (isset($reservation) && !empty($reservation->getStatus()) ? $statusText[$reservation->getStatus()] : '' ) . '</td>
-                        <td width="200"> ' . (!empty($roomTd) ? $buttons . '&nbsp;' : '') . $deleteButton . '</td>
+                        <td width="200"> ' . (!$contact->isDeleted() ? $editButton . '&nbsp;' : '') . (!empty($roomTd) ? $actionButton . '&nbsp;' : '') . $deleteButton . '</td>
                      </tr>';
 
                         if (!empty($roomTd)) {
