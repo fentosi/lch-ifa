@@ -18,7 +18,7 @@ $contactId = (isset($_GET['contactId']) ? intval($_GET['contactId']) : 0);
 
 if ($contactId === 0) die();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' /* && !empty($_POST['token']) */) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
     $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
 
     if ($recaptcha->isValid()) {
