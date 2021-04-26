@@ -1,6 +1,6 @@
 <?php
     use \Firebase\JWT\JWT;
-    
+
     ini_set('display_errors', 'off');
     require_once('vendor/autoload.php');
 
@@ -39,7 +39,7 @@
         return empty($value) ? '' : htmlspecialchars($value);
     }
 
-    if ($_GET['reservation']) {
+    if (isset($_GET['reservation'])) {
       try {
           $reservationData = JWT::decode($_GET['reservation'], $_ENV['JWT_SECRET'], array('HS256'));
           if (!empty($reservationData->room)) {
@@ -50,8 +50,6 @@
       } catch (Exception $e) {
           $error[] = 'Nem megfelelo a foglalasi informacio';
       }
-    } else {
-        $error[] = 'Nincs megadva foglalasi informacio';
     }
 ?>
 <!DOCTYPE html>
@@ -154,7 +152,7 @@
             <div class="row">
                 <div class="four columns">
                   <label>Szoba</label>
-                  <input type="text" class="u-full-width" id="room" name="room" disabled
+                  <input type="text" class="u-full-width" id="room" name="room" readonly
                          value="<?= getEscapedValue('room', $contact) ?>">
                   <div class="error">A mező kitöltése kötelező</div>
                 </div>
