@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 'on');
+ini_set('display_errors', 'off');
 require_once ('../vendor/autoload.php');
 
 $dotenv = Dotenv\Dotenv::create('../');
@@ -18,21 +18,16 @@ $contactId = (isset($_GET['contactId']) ? intval($_GET['contactId']) : 0);
 
 if ($contactId === 0) die();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
-    $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $contactRepository = new ContactRepository($mysqli);
 
-    if ($recaptcha->isValid()) {
-        $contactRepository = new ContactRepository($mysqli);
 
-        $contact = Contact::createFrom($_POST);
-        try {
-            $contactRepository->saveContact($contact);
-            header('Location: edit.php?contactId=' . $contact->getId());
-        } catch (Exception $exception) {
-            $errors[] = $exception->getMessage();
-        }
-    } else {
-        $errors[] = 'Captcha ellenőrzés hiba, a form újraküldéséhez kattints a küldés gombra!';
+    $contact = Contact::createFrom($_POST);
+    try {
+        $contactRepository->saveContact($contact);
+        header('Location: edit.php?contactId=' . $contact->getId());
+    } catch (Exception $exception) {
+        $errors[] = $exception->getMessage();
     }
 }
 
@@ -165,12 +160,3 @@ function getEscapedValue(string $key, Contact $contact) {
             </form>
     </body>
 </html>
-
-<script src="https://www.google.com/recaptcha/api.js?render=<?= $_ENV['RECAPTCHA_KEY'] ?>"></script>
-<script>
-  grecaptcha.ready(function () {
-    grecaptcha.execute('<?=$_ENV['RECAPTCHA_KEY']?>', {action: 'homepage'}).then(function (token) {
-      $('#token').val(token);
-    });
-  });
-</script>
