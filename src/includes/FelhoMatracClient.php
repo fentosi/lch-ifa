@@ -39,10 +39,14 @@ class FelhoMatracClient
         }
 
         $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]);
-
         $reservation->setReservationHash(Uuid::uuid4()->toString());
 
-        $reservation->setRoomHash($contacts[0]->getRoom());
+        $room = $contacts[0]->getRoom();
+        if (strtolower($room) === $_ENV['UNIT_ROOM']) {
+            $this->makeRoom($reservation);
+        } else {
+            $reservation->setRoomHash($room);
+        }
 
         $response = $this->sendPostRequest(
             '/reservation',
