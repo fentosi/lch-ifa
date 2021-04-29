@@ -18,7 +18,7 @@ class FelhoMatracClient
         $this->client = new Client();
     }
 
-    public function makeRooom(Reservation $reservation): Reservation {
+    public function makeRoom(Reservation $reservation): Reservation {
         $reservation->setRoomHash(Uuid::uuid4()->toString());
 
         $response = $this->sendPostRequest('/room', $this->getRoomBody($reservation));
