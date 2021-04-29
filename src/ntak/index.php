@@ -33,9 +33,14 @@ if (isset($_GET['action'])) {
     try {
         switch($_GET['action']) {
             case 'claim':
-                if (!empty($_GET['room'])) {
-                    $contactsArray = $contactRepository->getByRoom($_GET['room']);
-                    $contacts = array_map('Contact::createFrom', $contactsArray);
+                if (!empty($_GET['room']) || !empty($_GET['contactId'])) {
+                    if (!empty($_GET['contactId'])) {
+                      $contact = Contact::createFrom($contactRepository->getById($_GET['contactId']));
+                      $contacts = [$contact];
+                    } else {
+                        $contactsArray = $contactRepository->getByRoom($_GET['room']);
+                        $contacts = array_map('Contact::createFrom', $contactsArray);
+                    }
 
                     $reservation = new Reservation($mysqli);
                     $reservation->save();
@@ -140,30 +145,40 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
 
                 /** @var Contact[] $contacts */
                 foreach ($groupedContacts as $room => $contacts) {
+                    $isUnitRoom = strtolower($room) === strtolower($_ENV['UNIT_ROOM']);
                     $roomTd = '<td rowspan="' . count($contacts) . '" width="100"> '. $room .' </td>';
-                    $reservationId = $contacts[0]->getReservationId();
-                    $reservation = null;
 
-                    if (is_null($reservationId)) {
-                        $actionLink = './index.php?action=claim&room=' . urlencode($room);
-                        $actionText = 'Igenyles';
-                    } else {
-                        $reservation = $reservations[$reservationId];
-                        switch($reservation->getStatus()) {
-                            case null:
-                                break;
-                            case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
-                                $actionLink = './index.php?action=arrival&reservationId=' . $reservation->getId();
-                                $actionText = 'Erkezes';
-                                break;
-                            case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
-                                $actionLink = './index.php?action=departure&reservationId=' . $reservation->getId();
-                                $actionText = 'Tavozas';
-                                break;
+                    if (!$isUnitRoom) {
+                        $reservationId = $contacts[0]->getReservationId();
+                        if (is_null($reservationId)) {
+                            $actionLink = './index.php?action=claim&room=' . urlencode($room);
+                            $actionText = 'Igenyles';
                         }
                     }
 
                     foreach ($contacts as $contact) {
+                        $reservationId = $contact->getReservationId();
+                        $reservation = null;
+                        if (is_null($reservationId) && $isUnitRoom) {
+                            $actionLink = './index.php?action=claim&contactId=' . urlencode($contact->getId());
+                            $actionText = 'Igenyles';
+
+                        } else if (!is_null($reservationId)) {
+                          $reservation = $reservations[$reservationId];
+                          switch($reservation->getStatus()) {
+                              case null:
+                                  break;
+                              case ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]:
+                                  $actionLink = './index.php?action=arrival&reservationId=' . $reservation->getId();
+                                  $actionText = 'Erkezes';
+                                  break;
+                              case ReservationStatuses::STATUS_CODES[ReservationStatuses::ARRIVED]:
+                                  $actionLink = './index.php?action=departure&reservationId=' . $reservation->getId();
+                                  $actionText = 'Tavozas';
+                                  break;
+                          }
+                        }
+
                         $editButton = '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-id="' . $contact->getId() . '" data-bs-target="#editContactModal"><i class="bi-pencil"></i></button> ';
 
                         $actionButton = '';
@@ -188,7 +203,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         <td width="120">' . $contact->getArrivalDate() . '</td>
                         <td width="120">' . $contact->getDepartureDate() . '</td>
                         <td width="50">' . (isset($reservation) && !empty($reservation->getStatus()) ? $statusText[$reservation->getStatus()] : '' ) . '</td>
-                        <td width="200"> ' . (!$contact->isDeleted() ? $editButton . '&nbsp;' : '') . (!empty($roomTd) ? $actionButton . '&nbsp;' : '') . $deleteButton . '</td>
+                        <td width="200"> ' . (!$contact->isDeleted() ? $editButton . '&nbsp;' : '') . (!empty($roomTd)  || $isUnitRoom ? $actionButton . '&nbsp;' : '') . $deleteButton . '</td>
                      </tr>';
 
                         if (!empty($roomTd)) {
