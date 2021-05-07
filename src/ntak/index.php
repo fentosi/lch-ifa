@@ -89,6 +89,12 @@ if (isset($_GET['action'])) {
                 }
 
                 break;
+            case 'restore':
+                if (!empty($_GET['contactId'])) {
+                    $contactRepository->restoreContact($_GET['contactId']);
+                }
+
+                break;
         }
     } catch (Exception $e) {
         $errors[] = $e->getMessage();
@@ -186,10 +192,13 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                             $actionButton .= '<a href="' . $actionLink .'" class="btn btn-primary" role="button">' . $actionText . '</a>';
                         }
 
-                        $deleteButton = '';
+                        $contactActionButton = '';
                         if (!$contact->isDeleted()) {
-                            $deleteLink = './index.php?action=delete&contactId=' . $contact->getId();
-                            $deleteButton = '<a href="' . $deleteLink .'" class="btn btn-danger" role="button" style="float: right;">Torles</a>';
+                            $link = './index.php?action=delete&contactId=' . $contact->getId();
+                            $contactActionButton = '<a href="' . $link .'" class="btn btn-danger" role="button" style="float: right;">Torles</a>';
+                        } else {
+                            $link = './index.php?action=restore&contactId=' . $contact->getId();
+                            $contactActionButton = '<a href="' . $link .'" class="btn btn" role="button" style="float: right;">Visszaallitas</a>';
                         }
 
                         echo '
@@ -203,7 +212,7 @@ $statusText = array_flip(ReservationStatuses::STATUS_CODES);
                         <td width="120">' . $contact->getArrivalDate() . '</td>
                         <td width="120">' . $contact->getDepartureDate() . '</td>
                         <td width="50">' . (isset($reservation) && !empty($reservation->getStatus()) ? $statusText[$reservation->getStatus()] : '' ) . '</td>
-                        <td width="200"> ' . (!$contact->isDeleted() ? $editButton . '&nbsp;' : '') . (!empty($roomTd)  || $isUnitRoom ? $actionButton . '&nbsp;' : '') . $deleteButton . '</td>
+                        <td width="200"> ' . (!$contact->isDeleted() ? $editButton . '&nbsp;' : '') . (!empty($roomTd)  || $isUnitRoom ? $actionButton . '&nbsp;' : '') . $contactActionButton . '</td>
                      </tr>';
 
                         if (!empty($roomTd)) {
