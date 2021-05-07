@@ -224,6 +224,29 @@ class ContactRepository
         $statement->close();
     }
 
+    public function restoreContact(int $contactId) {
+        if (!($statement = $this->mysqli->prepare(
+            "
+                UPDATE
+                    ifa
+                SET
+                    deleted = NULL
+                WHERE
+                    id = ?
+            "))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('d', $contactId);
+
+        if (!$statement->execute()) {
+            $statement->close();
+            throw new Exception("Databases update error");
+        }
+
+        $statement->close();
+    }
+
     public function saveContact(Contact $contact)
     {
         if (!($statement = $this->mysqli->prepare(
