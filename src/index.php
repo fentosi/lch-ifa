@@ -15,10 +15,10 @@
 
     $contact = Contact::createFrom($_POST);
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['token'])) {
-        $recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' /*&& !empty($_POST['token'])*/) {
+        //$recaptcha = new reCaptcha($_POST['token'], $_ENV['RECAPTCHA_SECRET']);
 
-        if ($recaptcha->isValid()) {
+        //if ($recaptcha->isValid()) {
             $contactRepository = new ContactRepository($mysqli);
 
             try {
@@ -27,9 +27,9 @@
             } catch (Exception $exception) {
                 $error[] = $exception->getMessage();
             }
-        } else {
-            $error[] = 'Captcha ellenőrzés hiba, a form újraküldéséhez kattints a küldés gombra!';
-        }
+//        } else {
+//            $error[] = 'Captcha ellenőrzés hiba, a form újraküldéséhez kattints a küldés gombra!';
+//        }
     }
 
     function getEscapedValue(string $key, Contact $contact) {
@@ -58,7 +58,7 @@
 
 <div class="content">
     <div class="container">
-        <h3 style="text-align: center">NTAK - Bejelentő lap</h3>
+        <h3 style="text-align: center">NTAK - Szállásbejelentő lap</h3>
         <p>
             Kérünk, hogy az alábbi bejelntőlapot töltsd ki és hozd magaddal, ennek hiányában sajnos nem tudunk beengedni
             a rendezvényre. Természetesen a rendezvény helyszínén is biztositunk bejelentőlapot.
@@ -123,7 +123,7 @@
                     <div class="error">A mező kitöltése kötelező</div>
                 </div>
                 <div class="three columns">
-                    <label>Szemelyi igazolvany</label>
+                    <label>Személyi igazolvány</label>
                     <input type="text" class="u-full-width" id="id_number" name="id_number"
                            value="<?= getEscapedValue('idNumber', $contact) ?>">
                     <div class="error">A mező kitöltése kötelező</div>
@@ -136,36 +136,34 @@
                 </div>
             </div>
             <div class="row">
-                <div class="six columns">
+                <div class="four columns">
+                  <label>Szoba</label>
+                  <input type="text" class="u-full-width" id="room" name="room" readonly
+                         value="<?= getEscapedValue('room', $contact) ?>">
+                  <div class="error">A mező kitöltése kötelező</div>
+                </div>
+                <div class="four columns">
                     <label>Érkezés napja</label>
-                    2020. augusztus
-                    <select id="arrival_date" name="arrival_date">
+                    <select id="arrival_date" name="arrival_date" class="u-full-width">
                         <option value=""></option>
-                        <option value="27" <?= (getEscapedValue('arrivalDate', $contact) == 27 ? 'selected' : '') ?>>27.
-                            csütörtök
+                        <option value="27" <?= (getEscapedValue('arrivalDate', $contact) == 27 ? 'selected' : '') ?>>2021. augusztus 27.
+                          péntek
                         </option>
-                        <option value="28" <?= (getEscapedValue('arrivalDate', $contact) == 28 ? 'selected' : '') ?>>28.
-                            péntek
-                        </option>
-                        <option value="29" <?= (getEscapedValue('arrivalDate', $contact) == 29 ? 'selected' : '') ?>>29.
-                            szombat
+                        <option value="28" <?= (getEscapedValue('arrivalDate', $contact) == 28 ? 'selected' : '') ?>>2021. augusztus 28.
+                          szombat
                         </option>
                     </select>
                     <div class="error">A mező kitöltése kötelező</div>
                 </div>
-                <div class="six columns">
+                <div class="four columns">
                     <label>Távozás napja</label>
-                    2020. augusztus
-                    <select id="departure_date" name="departure_date">
+                    <select id="departure_date" name="departure_date" class="u-full-width">
                         <option value=""></option>
-                        <option value="28" <?= (getEscapedValue('departureDate', $contact) == 28 ? 'selected' : '') ?>>
-                            28. péntek
+                        <option value="28" <?= (getEscapedValue('departureDate', $contact) == 28 ? 'selected' : '') ?>>2021. augusztus 28.
+                          szombat
                         </option>
-                        <option value="29" <?= (getEscapedValue('departureDate', $contact) == 29 ? 'selected' : '') ?>>
-                            29. szombat
-                        </option>
-                        <option value="30" <?= (getEscapedValue('departureDate', $contact) == 30 ? 'selected' : '') ?>>
-                            30. vasárnap
+                        <option value="29" <?= (getEscapedValue('departureDate', $contact) == 29 ? 'selected' : '') ?>>2021. augusztus 29.
+                          vasárnap
                         </option>
                     </select>
                     <div class="error">A mező kitöltése kötelező</div>
@@ -181,7 +179,7 @@
                         <option value="Kiskoru" <?= ($contact->getExemption() == 'Kiskoru' ? 'selected' : '') ?>>18.
                             életévét be nem töltött magánszemély
                         </option>
-                        <option value="Soltvadkerti" <?= ($contact->getExemption() == 'Soltvadkerti' ? 'selected' : '') ?>>
+                        <option value="Helyi" <?= ($contact->getExemption() == 'Helyi' ? 'selected' : '') ?>>
                             A településen lakóhellyel, tartózkodási hellyel rendelkező vendég
                         </option>
                         <option value="70ev" <?= ($contact->getExemption() == '70ev' ? 'selected' : '') ?>>70. életévet
@@ -237,6 +235,6 @@
         });
     });
 </script>
-<script src="scripts/scripts.js?202008050756"></script>
+<script src="scripts/scripts.js?202106221943"></script>
 </body>
 </html>

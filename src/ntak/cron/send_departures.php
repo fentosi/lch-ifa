@@ -1,5 +1,5 @@
 <?php
-
+die();
 ini_set('display_errors', 'on');
 ini_set('max_execution_time', 0);
 

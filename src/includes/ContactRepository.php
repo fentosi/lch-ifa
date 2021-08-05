@@ -3,19 +3,17 @@
 
 class ContactRepository
 {
+    const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, deleted';
+    const DATE_PREFIX = "2021-08-";
+
     /**
      * @var mysqli
      */
     private $mysqli;
-    /**
-     * @var string
-     */
-    private $datePrefix;
 
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
-        $this->datePrefix = "2020-08-";
     }
 
     public function getByHash(string $hash)
@@ -23,7 +21,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id
+                " . self::FIELDS . "
             FROM 
                 ifa
             WHERE 
@@ -33,13 +31,7 @@ class ContactRepository
 
         $statement->bind_param('s', $hash);
 
-        if (!$statement->execute()) {
-            throw new Exception("Execute failed");
-        }
-
-        if (!($result = $statement->get_result())) {
-            throw new Exception("Getting result set failed");
-        }
+        $result = $this->executeStatement($statement);
 
         return $result->fetch_assoc();
     }
@@ -49,7 +41,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id
+                " . self::FIELDS . "
             FROM 
                 ifa
             WHERE 
@@ -59,28 +51,74 @@ class ContactRepository
 
         $statement->bind_param('d', $id);
 
-        if (!$statement->execute()) {
-            throw new Exception("Execute failed");
-        }
-
-        if (!($result = $statement->get_result())) {
-            throw new Exception("Getting result set failed");
-        }
+        $result = $this->executeStatement($statement);
 
         return $result->fetch_assoc();
     }
 
-    public function getAllWithReservationData()
+    /**
+     * @param string $room
+     * @return Contact[]
+     * @throws Exception
+     */
+    public function getByRoom(string $room): array
+    {
+        if (!($statement = $this->mysqli->prepare(
+            "
+            SELECT
+                " . self::FIELDS . "
+            FROM 
+                ifa
+            WHERE 
+                room = ?
+            AND
+                reservation_id IS NULL
+                "))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('s', $room);
+
+        $result = $this->executeStatement($statement);
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * @param int $reservationId
+     * @return Contact[]
+     * @throws Exception
+     */
+    public function getByReservationId(int $reservationId): array
+    {
+        if (!($statement = $this->mysqli->prepare(
+            "
+            SELECT
+                " . self::FIELDS . "
+            FROM 
+                ifa
+            WHERE 
+                reservation_id = ?
+            AND
+                room IS NOT NULL
+                "))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('d', $reservationId);
+
+        $result = $this->executeStatement($statement);
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getAll()
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, deleted, status
+                " . self::FIELDS . "
             FROM 
                 ifa
-            LEFT JOIN 
-                ifa_reservation
-            ON
-                ifa_reservation.id = ifa.reservation_id
             ORDER BY last_name";
 
         if ($result = $this->mysqli->query($query)) {
@@ -95,7 +133,7 @@ class ContactRepository
         if (!($statement = $this->mysqli->prepare(
             "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, status
+                " . self::FIELDS . ", status
             FROM 
                 ifa
             LEFT JOIN 
@@ -111,13 +149,7 @@ class ContactRepository
 
         $statement->bind_param('d', $status);
 
-        if (!$statement->execute()) {
-            throw new Exception("Execute failed");
-        }
-
-        if (!($result = $statement->get_result())) {
-            throw new Exception("Getting result set failed");
-        }
+        $result = $this->executeStatement($statement);
 
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -126,7 +158,7 @@ class ContactRepository
     {
         $query = "
             SELECT
-                ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, reservation_id, status
+                " . self::FIELDS . "
             FROM 
                 ifa
             LEFT JOIN 
@@ -192,17 +224,54 @@ class ContactRepository
         $statement->close();
     }
 
+    public function restoreContact(int $contactId) {
+        if (!($statement = $this->mysqli->prepare(
+            "
+                UPDATE
+                    ifa
+                SET
+                    deleted = NULL
+                WHERE
+                    id = ?
+            "))) {
+            throw new Exception("SQL Statement error");
+        }
+
+        $statement->bind_param('d', $contactId);
+
+        if (!$statement->execute()) {
+            $statement->close();
+            throw new Exception("Databases update error");
+        }
+
+        $statement->close();
+    }
+
     public function saveContact(Contact $contact)
     {
         if (!($statement = $this->mysqli->prepare(
             "INSERT INTO 
                     ifa
-                        (last_name, first_name, zip, city, reg_num, dob, nationality, id_number, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
+                        (id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, consent, hash, created)
                     VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )"))) {
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now() )
+                    ON DUPLICATE KEY UPDATE
+                    last_name = ?,
+                    first_name = ?,
+                    zip = ?,
+                    city = ?,
+                    reg_num = ?,
+                    dob = ?,
+                    nationality = ?,
+                    id_number = ?,
+                    room = ?,
+                    arrival_date = ?,
+                    departure_date = ?
+                    "))) {
             throw new Exception("SQL Statement error");
         }
 
+        $id = $contact->getId();
         $last_name = $contact->getLastName();
         $first_name = $contact->getFirstName();
         $zip = $contact->getZip();
@@ -211,15 +280,18 @@ class ContactRepository
         $dob = $contact->getDob();
         $nationality = $contact->getNationality();
         $idNumber = $contact->getIdNumber();
-        $arrivalDate = $this->datePrefix . $contact->getArrivalDate();
-        $departureDate = $this->datePrefix . $contact->getDepartureDate();
+        $arrivalDate = self::DATE_PREFIX. $contact->getArrivalDate();
+        $departureDate = self::DATE_PREFIX . $contact->getDepartureDate();
         $exemption = $contact->getExemption();
         $exemptionProofType = $contact->getExemptionProofType();
         $exemptionProofNum = $contact->getExemptionProofNum();
         $consent = $contact->getConsent();
         $hash = $contact->getHash();
+        $room = $contact->getRoom();
 
-        $statement->bind_param('sssssssssssssss', $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash);
+        $statement->bind_param('dsssssssssssssssssssssssssss', $id, $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room,
+            $arrivalDate, $departureDate, $exemption, $exemptionProofType, $exemptionProofNum, $consent, $hash,
+            $last_name, $first_name, $zip, $city, $regNum, $dob, $nationality, $idNumber, $room, $arrivalDate, $departureDate);
 
         if (!$statement->execute()) {
 
@@ -228,5 +300,18 @@ class ContactRepository
         }
 
         $statement->close();
+    }
+
+    private function executeStatement(mysqli_stmt $statement): mysqli_result
+    {
+        if (!$statement->execute()) {
+            throw new Exception("Execute failed");
+        }
+
+        if (!($result = $statement->get_result())) {
+            throw new Exception("Getting result set failed");
+        }
+
+        return $result;
     }
 }

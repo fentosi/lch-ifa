@@ -27,6 +27,7 @@ class IFAMaker
 
         $country_name = Countries::EU[$this->contact->getNationality()]['name'];
 
+        imagettftext($this->image, self::FONT_SIZE, 0, 830, 1460, $black, self::FONT, $this->contact->getRoom());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1560, $black, self::FONT, $this->contact->getArrivalDate());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1660, $black, self::FONT, $this->contact->getDepartureDate());
         imagettftext($this->image, self::FONT_SIZE, 0, 830, 1760, $black, self::FONT, $this->contact->getLastName() . ' ' . $this->contact->getFirstName());
@@ -40,7 +41,7 @@ class IFAMaker
             case 'Kiskoru':
                 imagettftext($this->image, 30, 0, 287, 2600, $black, self::FONT, 'X');
                 break;
-            case 'Soltvadkerti':
+            case 'Helyi':
                 imagettftext($this->image, 30, 0, 287, 2658, $black, self::FONT, 'X');
                 break;
             case '70ev':

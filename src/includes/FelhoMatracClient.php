@@ -18,7 +18,7 @@ class FelhoMatracClient
         $this->client = new Client();
     }
 
-    public function makeRooom(Reservation $reservation): Reservation {
+    public function makeRoom(Reservation $reservation): Reservation {
         $reservation->setRoomHash(Uuid::uuid4()->toString());
 
         $response = $this->sendPostRequest('/room', $this->getRoomBody($reservation));
@@ -27,24 +27,32 @@ class FelhoMatracClient
         return $reservation;
     }
 
+    /**
+     * @param Reservation $reservation
+     * @param Contact[] $contacts
+     * @return Reservation
+     * @throws Exception
+     */
     public function makeReservation(Reservation $reservation, array $contacts): Reservation {
         if ($reservation->getStatus() !== "") {
             throw new Exception('Wrong status for make a reservation!');
         }
 
         $reservation->setStatus(ReservationStatuses::STATUS_CODES[ReservationStatuses::CLAIMED]);
-
         $reservation->setReservationHash(Uuid::uuid4()->toString());
 
-        $reservation = $this->makeRooom($reservation);
+        $room = $contacts[0]->getRoom();
+        if (strtolower($room) === $_ENV['UNIT_ROOM']) {
+            $this->makeRoom($reservation);
+        } else {
+            $reservation->setRoomHash($room);
+        }
 
         $response = $this->sendPostRequest(
             '/reservation',
             $this->getReservationBody($contacts, $reservation));
 
         $this->isResponseOK($response);
-
-        $reservation = $this->addDebitToReservation($contacts, $reservation);
 
         $reservation->save();
 
@@ -96,6 +104,11 @@ class FelhoMatracClient
     }
 
 
+    /**
+     * @param Contact[]
+     * @param Reservation $reservation
+     * @return array
+     */
     private function getReservationBody(array $contacts, Reservation $reservation): array {
         return [
             'resNr' => 'FOGL' . $reservation->getId(),
@@ -220,7 +233,7 @@ class FelhoMatracClient
             case 'Kiskoru':
                 $ntakException = 'im1';
                 break;
-            case 'Soltvadkerti':
+            case 'Helyi':
                 $ntakException = 'im10';
                 break;
         }

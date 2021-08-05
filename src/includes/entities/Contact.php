@@ -20,6 +20,8 @@ class Contact
     private $hash;
     private $reservationId;
     private $id;
+    private $room;
+    private $deleted;
 
     public function __construct(
         string $last_name,
@@ -30,13 +32,15 @@ class Contact
         string $dob,
         string $nationality,
         string $idNumber,
+        string $room,
         string $arrivalDate,
         string $departureDate,
         string $exemption,
         string $exemptionProofType,
         string $exemptionProofNum,
         int $reservationId = null,
-        int $id = null
+        int $id = null,
+        string $deleted = null
         )
     {
         $this->last_name = $last_name;
@@ -56,9 +60,11 @@ class Contact
         $this->hash = spl_object_hash($this);
         $this->id = $id;
         $this->reservationId = $reservationId;
+        $this->room = (!empty($room) ? $room : 'Kemping');
+        $this->deleted = $deleted;
     }
 
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -104,6 +110,11 @@ class Contact
         return $this->idNumber;
     }
 
+    public function getRoom(): string
+    {
+        return $this->room;
+    }
+
     public function getArrivalDate(): string
     {
         return $this->arrivalDate;
@@ -139,9 +150,14 @@ class Contact
         return $this->hash;
     }
 
-    public function getReservationId(): int
+    public function getReservationId()
     {
         return $this->reservationId;
+    }
+
+    public function isDeleted(): bool
+    {
+        return !is_null($this->deleted);
     }
 
     public function get($key) {
@@ -159,13 +175,15 @@ class Contact
             $data['dob'] ?? '',
             $data['nationality'] ?? '',
             $data['id_number'] ?? '',
+            $data['room'] ?? '',
             $data['arrival_date'] ?? '',
             $data['departure_date'] ?? '',
             $data['exemption'] ?? '',
             $data['exemption_proof_type'] ?? '',
             $data['exemption_proof_num'] ?? '',
             $data['reservation_id'] ?? null,
-            $data['id'] ?? null
+            $data['id'] ?? null,
+            $data['deleted'] ?? null
         );
     }
 }
