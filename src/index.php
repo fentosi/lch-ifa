@@ -67,7 +67,7 @@
 <body>
 <header>
     <div class="container">
-        <img src="images/rcs.png" alt="RCS Logo">
+        <img src="images/rcs.png?123" alt="RCS Logo">
     </div>
 </header>
 
