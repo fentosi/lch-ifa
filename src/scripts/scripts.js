@@ -27,7 +27,6 @@
             'first_name',
             'zip',
             'city',
-            'reg_num',
             'dob',
             'nationality',
             'id_number',
