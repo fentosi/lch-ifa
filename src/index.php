@@ -153,7 +153,7 @@
                 <div class="four columns">
                   <label>Szoba</label>
                   <input type="text" class="u-full-width" id="room" name="room" readonly
-                         value="<?= getEscapedValue('room', $contact) ?>">
+                         value="Kunfehértó Kemping">
                   <div class="error">A mező kitöltése kötelező</div>
                 </div>
                 <div class="four columns">
