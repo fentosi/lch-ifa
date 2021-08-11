@@ -4,7 +4,7 @@
 class ContactRepository
 {
     const FIELDS = 'ifa.id, last_name, first_name, zip, city, reg_num, dob, nationality, id_number, room, arrival_date, departure_date, exemption, exemption_proof_type, exemption_proof_num, reservation_id, deleted';
-    const DATE_PREFIX = "2021-06-";
+    const DATE_PREFIX = "2021-08-";
 
     /**
      * @var mysqli

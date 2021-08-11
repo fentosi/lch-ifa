@@ -19,16 +19,13 @@
 
         <div class="content">
             <div class="container" style="text-align: center">
-                <p class="<?=(count($error) ? 'has-error' : '')?>">
-                    <?=implode('<br /><br />', $error)?>
-                </p>
                 <br />
                 <p>
                     Köszönjük!  Kérünk, hogy a mielőbbi bejutás érdekében a bejelentőlapot kinyomtatva/mobilon felmutatva hozd magaddal!
                     <br /><br />
                     A kitöltött bejelentőlapot <a href="ifa.php?hash=<?=$_GET['hash']?>">INNEN</a> tudod letölteni!
                     <br /><br />
-                    Várunk 2021. június 17-21 között a BMW találkozón!
+                    Várunk 2021. augusztus 19-22 között Kunfehértón, a BMW találkozón!
                     <br /><br />
                     Az RCS csapata
                 </p>
