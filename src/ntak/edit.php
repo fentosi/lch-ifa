@@ -125,13 +125,13 @@ function getEscapedValue(string $key, Contact $contact) {
                   <label class="form-label" >Érkezés napja</label>
                   <select id="arrival_date" name="arrival_date" class="form-select">
                     <option value=""></option>
-                    <option value="17" <?= (getEscapedValue('arrivalDate', $contact) == ContactRepository::DATE_PREFIX . '17' ? 'selected' : '') ?>>2021. június 17.
+                    <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == ContactRepository::DATE_PREFIX . '19' ? 'selected' : '') ?>>2021. augusztus 19.
                       csütörtök
                     </option>
-                    <option value="18" <?= (getEscapedValue('arrivalDate', $contact) == ContactRepository::DATE_PREFIX . '18' ? 'selected' : '') ?>>2021. június 18.
+                    <option value="20" <?= (getEscapedValue('arrivalDate', $contact) == ContactRepository::DATE_PREFIX . '20' ? 'selected' : '') ?>>2021. augusztus 20.
                       péntek
                     </option>
-                    <option value="19" <?= (getEscapedValue('arrivalDate', $contact) == ContactRepository::DATE_PREFIX . '19' ? 'selected' : '') ?>>2021. június 19.
+                    <option value="21" <?= (getEscapedValue('arrivalDate', $contact) == ContactRepository::DATE_PREFIX . '21' ? 'selected' : '') ?>>2021. augusztus 21.
                       szombat
                     </option>
                   </select>
@@ -140,13 +140,13 @@ function getEscapedValue(string $key, Contact $contact) {
                   <label class="form-label" >Távozás napja</label>
                   <select id="departure_date" name="departure_date" class="form-select">
                     <option value=""></option>
-                    <option value="18" <?= (getEscapedValue('departureDate', $contact) == ContactRepository::DATE_PREFIX . '18' ? 'selected' : '') ?>>2021. június 18.
+                    <option value="20" <?= (getEscapedValue('departureDate', $contact) == ContactRepository::DATE_PREFIX . '20' ? 'selected' : '') ?>>2021. augusztus 20.
                       péntek
                     </option>
-                    <option value="19" <?= (getEscapedValue('departureDate', $contact) == ContactRepository::DATE_PREFIX . '19' ? 'selected' : '') ?>>2021. június 19.
+                    <option value="21" <?= (getEscapedValue('departureDate', $contact) == ContactRepository::DATE_PREFIX . '21' ? 'selected' : '') ?>>2021. augusztus 21.
                       szombat
                     </option>
-                    <option value="20" <?= (getEscapedValue('departureDate', $contact) == ContactRepository::DATE_PREFIX . '20' ? 'selected' : '') ?>>2021. június 20.
+                    <option value="22" <?= (getEscapedValue('departureDate', $contact) == ContactRepository::DATE_PREFIX . '22' ? 'selected' : '') ?>>2021. augusztus 22.
                       vasárnap
                     </option>
                   </select>
