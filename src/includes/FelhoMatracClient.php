@@ -185,7 +185,7 @@ class FelhoMatracClient
             'catSbeds' => 0,
             'catId' => 1,
             'buildingName' => 'Kemping',
-            'buildingId' => 1,
+            'buildingId' => 428,
             'type' => 'room',
             'roomName' => 'Satorhely' . $reservation->getId(),
             'roomEbeds' => 10,
